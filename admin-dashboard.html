@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Barangay Health Care System - Admin</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="/cssdesign/styles.css">
+</head>
+<body>
+    <div id="adminDashboard">
+        <div class="sidebar">
+            <h3><img src="images/logoo.jpg" class="logo-circle"><br>MENU</h3>
+            <a onclick="showAdmin('adminHome', this)" class="active-link"><i class="fa-solid fa-chart-line"></i> <span>Dashboard</span></a>
+            <a onclick="showAdmin('adminAppointments', this)"><i class="fa-solid fa-calendar"></i> <span>Appointments</span></a>
+            <a onclick="showAdmin('adminFP', this)"><i class="fa-solid fa-notes-medical"></i> <span>Family Planning</span></a>
+            <a onclick="showAdmin('adminImmunization', this)"><i class="fa-solid fa-syringe"></i> <span>Immunization</span></a>
+            <a onclick="showAdmin('adminPrenatalCare', this)"><i class="fa-solid fa-book"></i> <span>Prenatal Care</span></a>
+            <a onclick="showAdmin('masterDashboard', this)"><i class="fa-solid fa-file-medical"></i> <span>Records</span></a>
+            <a onclick="showAdmin('archivedDashboard', this)"><i class="fa-solid fa-box-archive"></i> <span>Archive</span></a>
+            <a onclick="logout()"><i class="fa-solid fa-right-from-bracket"></i> <span>Logout</span></a>
+            <div class="dark-mode-toggle">
+                <i class="fa-solid fa-moon"></i>
+                <label class="switch">
+                    <input type="checkbox" id="darkModeToggle">
+                    <span class="slider round"></span>
+                </label>
+            </div>
+        </div>
+
+        <div class="main">
+            <div id="adminHome" class="section active">
+                <h1 class="dash-title">Admin Dashboard</h1>
+                <div class="dashboard-cards">
+                    <div class="dash-card" onclick="openModal('adminAppt')">
+                        <div class="icon-circle"><i class="fa-solid fa-calendar-check"></i></div>
+                        <div>
+                            <h3 id="adminTotalAppointments">0</h3>
+                            <p>Today's Appointments</p>
+                        </div>
+                    </div>
+
+                    <div class="dash-card" onclick="openModal('adminPending')">
+                        <div class="icon-circle"><i class="fa-solid fa-hourglass-half"></i></div>
+                        <div>
+                            <h3 id="adminTotalPending">0</h3>
+                            <p>Pending Approval</p>
+                        </div>
+                    </div>
+
+                    <div class="dash-card" onclick="openModal('adminComplete')">
+                        <div class="icon-circle"><i class="fa-solid fa-check-circle"></i></div>
+                        <div>
+                            <h3 id="adminTotalComplete">0</h3>
+                            <p>Complete</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="masterDashboard" class='section'>
+                <h2><i class="fa-solid fa-file-medical"></i> Record Dashboard</h2>
+                <div class="records-header">
+                    <input type="text" id="masterRecordSearch" placeholder="Search by patient name..." onkeyup="searchMasterRecords()">
+                </div>
+                <div class="appointments-container">
+                    <table id="recordTable">
+                        <thead>
+                            <tr>
+                                <th><i class="fa-solid fa-user"></i> Name</th>
+                                <th><i class="fa-solid fa-location-dot"></i> Location</th>
+                                <th><i class="fa-solid fa-calendar"></i> Date</th>
+                                <th><i class="fa-solid fa-cogs"></i> Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+                <div id="formModal" class="modal">
+                    <div class="modal-content">
+                        <span class="closeModal">&times;</span>
+                        <h3 id="modalTitle"></h3>
+                        <div id="modalDetails"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="adminAppointments" class="section">
+                <div class="appointments-container">
+                    <div class="records-header">
+                        <h1 class="appointments-title">All Records</h1>
+                        <input type="text" id="recordSearch" placeholder="Search record..." onkeyup="searchRecords()">
+                    </div>
+                    <table class="appointments-table">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Record Type</th>
+                                <th>Date</th>
+                                <th>Status</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="recordsTableBody2"></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div id="adminFP" class="section">
+                <div class="form-container">
+                    <h2><i class="fa-solid fa-notes-medical"></i> Family Planning Form</h2>
+                    <form id="family-planning-form">
+                        <fieldset>
+                            <legend>Personal Information</legend>
+                            <div class="form-grid grid-2">
+                                <div>
+                                    <label for="client-name">Name</label>
+                                    <input type="text" id="client-name" required>
+                                </div>
+                                <div>
+                                    <label for="childDob">Date of Birth</label>
+                                    <input type="date" id="childDob" required>
+                                </div>
+                                <div>
+                                    <label for="fpContact">Contact Number</label>
+                                    <input type="text" id="fpContact">
+                                </div>
+                                <div>
+                                    <label for="address">Address</label>
+                                    <input type="text" id="address">
+                                </div>
+                                <div>
+                                    <label for="spouse-name">Spouse's Name</label>
+                                    <input type="text" id="spouse-name">
+                                </div>
+                                <div>
+                                    <label for="children">No. of Living Children</label>
+                                    <input type="number" id="children">
+                                </div>
+                            </div>
+                        </fieldset>
+            
+                        <fieldset>
+                            <legend>Client Type & FP Reason</legend>
+                            <div class="form-grid grid-3 checkbox-group">
+                                <label><input type="checkbox"> New Acceptor</label>
+                                <label><input type="checkbox"> Current User</label>
+                                <label><input type="checkbox"> Changing Method</label>
+                                <label><input type="checkbox"> Changing Clinic</label>
+                                <label><input type="checkbox"> Dropout / Restart</label>
+                            </div>
+                            <div>
+                                <label for="fp-reason">Reason for FP (if changing)</label>
+                                <input type="text" id="fp-reason" placeholder="Specify reason">
+                            </div>
+                        </fieldset>
+            
+                        <fieldset>
+                            <legend>Method Recently Used</legend>
+                            <select>
+                                <option disabled selected>Select Method</option>
+                                <option>IUD</option><option>COC</option><option>POP</option><option>Injectable</option>
+                                <option>Implant</option><option>LAM</option><option>Condom</option><option>SDM</option>
+                                <option>BBT</option><option>STM</option><option>Others</option>
+                            </select>
+                        </fieldset>
+            
+                        <fieldset>
+                            <legend>Medical History</legend>
+                            <div class="question-group">
+                                <div class="form-question">
+                                    <span>Severe headaches / migraine</span>
+                                    <div class="radio-options">
+                                        <label><input type="radio" name="mh1" value="Yes"> Yes</label>
+                                        <label><input type="radio" name="mh1" value="No" checked> No</label>
+                                    </div>
+                                </div>
+                                <div class="form-question">
+                                    <span>History of stroke / heart attack / hypertension</span>
+                                    <div class="radio-options">
+                                        <label><input type="radio" name="mh2" value="Yes"> Yes</label>
+                                        <label><input type="radio" name="mh2" value="No" checked> No</label>
+                                    </div>
+                                </div>
+                                <div class="form-question">
+                                    <span>Non-traumatic hematoma / frequent bruising / gum bleeding</span>
+                                    <div class="radio-options">
+                                        <label><input type="radio" name="mh3" value="Yes"> Yes</label>
+                                        <label><input type="radio" name="mh3" value="No" checked> No</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </fieldset>
+            
+                        <fieldset>
+                            <legend>Risks for Violence Against Women (VAW)</legend>
+                            <div class="question-group">
+                                <div class="form-question">
+                                    <span>Unpleasant relationship with partner</span>
+                                    <div class="radio-options">
+                                        <label><input type="radio" name="vaw1" value="Yes"> Yes</label>
+                                        <label><input type="radio" name="vaw1" value="No" checked> No</label>
+                                    </div>
+                                </div>
+                                <div class="form-question">
+                                    <span>History of Domestic Violence</span>
+                                    <div class="radio-options">
+                                        <label><input type="radio" name="vaw2" value="Yes"> Yes</label>
+                                        <label><input type="radio" name="vaw2" value="No" checked> No</label>
+                                    </div>
+                                </div>
+                                <div class="form-question">
+                                    <span>Partner does not approve of this visit</span>
+                                    <div class="radio-options">
+                                        <label><input type="radio" name="vaw3" value="Yes"> Yes</label>
+                                        <label><input type="radio" name="vaw3" value="No" checked> No</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </fieldset>
+            
+                        <fieldset>
+                            <legend>Physical Examination</legend>
+                            <div class="form-grid grid-4">
+                                <div>
+                                    <label>Weight (kg)</label>
+                                    <input type="text" placeholder="kg">
+                                </div>
+                                <div>
+                                    <label>Height (m)</label>
+                                    <input type="text" placeholder="m">
+                                </div>
+                                <div>
+                                    <label>Blood Pressure</label>
+                                    <input type="text" placeholder="mmHg">
+                                </div>
+                                <div>
+                                    <label>Pulse Rate</label>
+                                    <input type="text" placeholder="/min">
+                                </div>
+                            </div>
+                        </fieldset>
+            
+                        <fieldset>
+                            <legend>Acknowledgement</legend>
+                            <textarea rows="3" placeholder="Notes or acknowledgement details..."></textarea>
+                            <div class="form-grid grid-2">
+                                <div>
+                                    <label for="guardian-signature">Parent/Guardian Signature</label>
+                                    <input type="text" id="guardian-signature">
+                                </div>
+                                <div>
+                                    <label>Date</label>
+                                    <input type="date">
+                                </div>
+                            </div>
+                        </fieldset>
+                        <button type="submit" class="btn" style="width:100%;">Save FP Form</button>
+                    </form>
+                </div>
+            </div>
+
+            <div id="adminImmunization" class="section">
+                <div class="form-container">
+                    <h2><i class="fa-solid fa-syringe"></i> Child Immunization Record</h2>
+                    <form id="immunization-form">
+                        <fieldset>
+                            <legend>Health Center Details</legend>
+                            <div class="form-grid grid-2">
+                                <div><label for="imm-hc-name">Health Center</label><input type="text" id="imm-hc-name" placeholder="Health Center"></div>
+                                <div><label for="imm-hc-barangay">Barangay</label><input type="text" id="imm-hc-barangay" placeholder="Barangay"></div>
+                                <div><label for="imm-hc-purok">Purok/Sitio/Zone</label><input type="text" id="imm-hc-purok" placeholder="PUROK/SITIO/ZONE"></div>
+                                <div><label for="imm-hc-family">Family No.</label><input type="text" id="imm-hc-family" placeholder="Family No."></div>
+                            </div>
+                        </fieldset>
+                        <fieldset>
+                            <legend>Child Information</legend>
+                            <div class="form-grid grid-2">
+                                <div><label for="imm-child-name">Child's Name</label><input type="text" id="imm-child-name" required></div>
+                                <div><label for="imm-dob">Date of Birth</label><input type="date" id="imm-dob"></div>
+                                <div><label for="imm-pob">Place of Birth</label><input type="text" id="imm-pob"></div>
+                                <div><label for="imm-address">Address</label><input type="text" id="imm-address"></div>
+                                <div><label for="imm-mother">Mother's Name</label><input type="text" id="imm-mother"></div>
+                                <div><label for="imm-father">Father's Name</label><input type="text" id="imm-father"></div>
+                                <div><label for="imm-height">Birth Height (cm)</label><input type="text" id="imm-height" placeholder="cm"></div>
+                                <div><label for="imm-sex">Sex</label><select id="imm-sex"><option value="">Select Sex</option><option>Male</option><option>Female</option></select></div>
+                            </div>
+                        </fieldset>
+                        <fieldset>
+                            <legend>Vaccination Record</legend>
+                            <div class="table-wrapper" style="overflow-x: auto;">
+                                <table>
+                                    <thead>
+                                        <tr><th>Bakuna</th><th>Dose</th><th>Petsa ng Bakuna</th><th>BHW Assigned</th></tr>
+                                    </thead>
+                                    <tbody id="vaccine-table-body">
+                                        <tr><td>BCG</td><td><select><option>Dose 1</option></select></td><td><input type="date"></td><td><input type="text"></td></tr>
+                                        <tr><td>Hepatitis B</td><td><select><option>Dose 1</option></select></td><td><input type="date"></td><td><input type="text"></td></tr>
+                                        <tr><td>Pentavalent Vaccine</td><td><select><option>Dose 1</option><option>Dose 2</option><option>Dose 3</option></select></td><td><input type="date"></td><td><input type="text"></td></tr>
+                                        <tr><td>OPV</td><td><select><option>Dose 1</option><option>Dose 2</option><option>Dose 3</option></select></td><td><input type="date"></td><td><input type="text"></td></tr>
+                                        <tr><td>IPV</td><td><select><option>Dose 1</option><option>Dose 2</option></select></td><td><input type="date"></td><td><input type="text"></td></tr>
+                                        <tr><td>PCV</td><td><select><option>Dose 1</option><option>Dose 2</option><option>Dose 3</option></select></td><td><input type="date"></td><td><input type="text"></td></tr>
+                                        <tr><td>MMR</td><td><select><option>Dose 1</option><option>Dose 2</option></select></td><td><input type="date"></td><td><input type="text"></td></tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </fieldset>
+                        <button type="submit" class="btn" style="width:100%;">Submit Immunization Form</button>
+                    </form>
+                </div>
+            </div>
+
+            <div id="adminPrenatalCare" class="section">
+                <div class="form-container">
+                    <h2><i class="fa-solid fa-baby"></i> Maternal Client Record for Prenatal Care</h2>
+                    <form id="prenatal-care-form">
+                        <fieldset>
+                            <legend>Personal Information</legend>
+                            <div class="form-grid grid-2">
+                                <div><label for="prenatal-name">Name</label><input type="text" id="prenatal-name" required></div>
+                                <div><label for="prenatal-age">Age</label><input type="number" id="prenatal-age" required></div>
+                                <div><label for="prenatal-address">Address</label><input type="text" id="prenatal-address"></div>
+                                <div><label for="prenatal-contact">Contact Number</label><input type="text" id="prenatal-contact"></div>
+                                <div><label for="prenatal-gender">Gender</label>
+                                    <select id="prenatal-gender"><option>Female</option><option>Male</option></select>
+                                </div>
+                            </div>
+                        </fieldset>
+
+                        <fieldset>
+                            <legend>HEENT (Head, Eyes, Ears, Nose, Throat)</legend>
+                            <div class="question-group">
+                                <div class="form-question"><span>Epilepsy/Convulsion/Seizure</span><div class="radio-options"><label><input type="radio" name="heent1" value="Yes"> Yes</label><label><input type="radio" name="heent1" value="No" checked> No</label></div></div>
+                                <div class="form-question"><span>Severe headache/dizziness</span><div class="radio-options"><label><input type="radio" name="heent2" value="Yes"> Yes</label><label><input type="radio" name="heent2" value="No" checked> No</label></div></div>
+                                <div class="form-question"><span>Visual disturbance</span><div class="radio-options"><label><input type="radio" name="heent3" value="Yes"> Yes</label><label><input type="radio" name="heent3" value="No" checked> No</label></div></div>
+                                <div class="form-question"><span>Yellowish conjunctiva</span><div class="radio-options"><label><input type="radio" name="heent4" value="Yes"> Yes</label><label><input type="radio" name="heent4" value="No" checked> No</label></div></div>
+                                <div class="form-question"><span>Enlarged thyroid</span><div class="radio-options"><label><input type="radio" name="heent5" value="Yes"> Yes</label><label><input type="radio" name="heent5" value="No" checked> No</label></div></div>
+                            </div>
+                        </fieldset>
+
+                        <fieldset>
+                            <legend>Family History</legend>
+                            <div class="question-group">
+                                <div class="form-question"><span>Hypertension</span><div class="radio-options"><label><input type="radio" name="fh1" value="Yes"> Yes</label><label><input type="radio" name="fh1" value="No" checked> No</label></div></div>
+                                <div class="form-question"><span>Diabetes</span><div class="radio-options"><label><input type="radio" name="fh2" value="Yes"> Yes</label><label><input type="radio" name="fh2" value="No" checked> No</label></div></div>
+                                <div class="form-question"><span>Asthma</span><div class="radio-options"><label><input type="radio" name="fh3" value="Yes"> Yes</label><label><input type="radio" name="fh3" value="No" checked> No</label></div></div>
+                                <div class="form-question"><span>Heart Disease</span><div class="radio-options"><label><input type="radio" name="fh4" value="Yes"> Yes</label><label><input type="radio" name="fh4" value="No" checked> No</label></div></div>
+                                <div class="form-question"><span>CVA / Stroke</span><div class="radio-options"><label><input type="radio" name="fh5" value="Yes"> Yes</label><label><input type="radio" name="fh5" value="No" checked> No</label></div></div>
+                            </div>
+                        </fieldset>
+
+                        <fieldset>
+                            <legend>Obstetrical History</legend>
+                            <div class="form-grid grid-3">
+                                <div><label>Pregnancies</label><input type="number" id="preg"></div>
+                                <div><label>Full Term</label><input type="number" id="fullterm"></div>
+                                <div><label>Premature</label><input type="number" id="preterm"></div>
+                                <div><label>Abortions</label><input type="number" id="abort"></div>
+                                <div><label>Living Children</label><input type="number" id="living"></div>
+                            </div>
+                        </fieldset>
+
+                        <fieldset>
+                            <legend>Vital Signs</legend>
+                            <div class="form-grid grid-3">
+                                <div><label>Blood Pressure</label><input type="text" id="bp" placeholder="e.g., 120/80"></div>
+                                <div><label>Weight (kg)</label><input type="number" id="weight"></div>
+                                <div><label>Height (cm)</label><input type="number" id="height"></div>
+                                <div><label>Pulse Rate</label><input type="number" id="pulse" placeholder="/min"></div>
+                                <div>
+                                    <label>TT Toxoid</label>
+                                    <select id="tt">
+                                        <option>TT1</option>
+                                        <option>TT2</option>
+                                        <option>TT3</option>
+                                        <option>TT4</option>
+                                        <option>TT5</option>
+                                        <option>Complete</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </fieldset>
+
+                        <fieldset>
+                            <legend>Impression / Diagnosis</legend>
+                            <textarea id="diagnosis" rows="4" placeholder="Enter clinical impression or diagnosis..."></textarea>
+                        </fieldset>
+
+                        <button type="submit" class="btn" style="width:100%;">Submit Prenatal Form</button>
+                    </form>
+                </div>
+            </div>
+
+            <div id="archivedDashboard" class="section">
+                <div class="archived-card">
+                    <h2><i class="fa-solid fa-box-archive"></i> Archived Appointments</h2>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th><input type="checkbox" id="selectAllArchived" onclick="toggleSelectAllArchived(this)"></th>
+                                <th><i class="fa-solid fa-user"></i> Name</th>
+                                <th><i class="fa-solid fa-notes-medical"></i> Type</th>
+                                <th><i class="fa-solid fa-calendar-days"></i> Date</th>
+                                <th><i class="fa-solid fa-gear"></i> Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="archivedTableBody"></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Details Modal for Admin Cards -->
+            <div id="detailsModal" class="modal">
+                <div class="modal-content">
+                    <span class="closeModal" onclick="closeModal()">&times;</span>
+                    <h2 id="modalTitle">Details</h2>
+                    <table id="modalTable">
+                        <thead><tr></tr></thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
+
+        </div> </div>
+    <script src="jsscript/script.js"></script>
+</body>
+</html>

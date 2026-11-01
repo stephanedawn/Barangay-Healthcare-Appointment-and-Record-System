@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Barangay Health Care - Login</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="/cssdesign/styles.css">
+</head>
+<body>
+
+    <div class="auth-container">
+        <div class="auth-box">
+            <div class="auth-left">
+                <h1>Barangay Health Care System</h1>
+                <p>Your one-stop solution for managing health records and appointments in the community.</p>
+            </div>
+            <div class="auth-right">
+                <div class="logo">
+                    <img src="images/logoo.jpg" alt="Logo">
+                </div>
+                
+                <!-- Login Form -->
+                <form id="loginForm">
+                    <h2>User Login</h2>
+                    <div class="input-box">
+                        <i class="fa-solid fa-user"></i>
+                        <input type="text" id="loginUsername" placeholder="Username" required>
+                    </div>
+                    <div class="input-box">
+                        <i class="fa-solid fa-lock"></i>
+                        <input type="password" id="loginPassword" placeholder="Password" required>
+                        <i class="fa-solid fa-eye" id="loginEye" onclick="togglePassword('loginPassword', 'loginEye')"></i>
+                    </div>
+                    <div class="input-box">
+                        <i class="fa-solid fa-user-shield"></i>
+                        <select id="loginRole">
+                            <option value="admin">Admin</option>
+                            <option value="patient">Patient</option>
+                        </select>
+                    </div>
+                    <button type="button" class="btn same-size-btn" onclick="login()">Login</button>
+                    <p class="toggle" onclick="showSignup()">Don't have an account? Sign Up</p>
+                </form>
+
+                <!-- Signup Form -->
+                <form id="signupForm" style="display: none;">
+                    <h2>Create Account</h2>
+                    <div class="input-box">
+                        <i class="fa-solid fa-user"></i>
+                        <input type="text" id="signupUsername" placeholder="Username" required>
+                    </div>
+                    <div class="input-box">
+                        <i class="fa-solid fa-lock"></i>
+                        <input type="password" id="signupPassword" placeholder="Password" required>
+                        <i class="fa-solid fa-eye" id="signupEye" onclick="togglePassword('signupPassword', 'signupEye')"></i>
+                    </div>
+                    <div class="input-box">
+                        <i class="fa-solid fa-lock"></i>
+                        <input type="password" id="confirmPassword" placeholder="Confirm Password" required>
+                    </div>
+                    <div class="input-box">
+                        <i class="fa-solid fa-user-shield"></i>
+                        <select id="signupRole">
+                            <option value="patient">Patient</option>
+                            <option value="admin">Admin</option>
+                        </select>
+                    </div>
+                    <button type="button" class="btn same-size-btn" onclick="signup()">Sign Up</button>
+                    <p class="toggle" onclick="showLogin()">Already have an account? Login</p>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div id="toast" class="toast"></div>
+
+    <script src="jsscript/script.js"></script>
+</body>
+</html>

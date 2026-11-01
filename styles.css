@@ -1,0 +1,5776 @@
+/* ================== VARIABLES & RESET ================== */
+:root {
+    --primary: #1abc9c; /* A brighter, more modern teal */
+    --primary-dark: #16a085;
+    --secondary: #2ecc71; /* A complementary green */
+    --accent: #e8f8f5; /* Lighter accent for backgrounds */
+    --text-dark: #34495e;
+    --text-light: #ecf0f1;
+    --bg-body: #ecf0f1; /* Lighter body background */
+    --white: #ffffff;
+
+    /* Dark Mode Variables */
+    --dark-bg: #2c3e50;
+    --dark-surface: #34495e;
+    --dark-text: #ecf0f1;
+    --dark-text-muted: #bdc3c7;
+    --dark-border: #4a627a;
+    --shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+    --transition: all 0.3s ease-in-out; /* Changed easing function */
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+body { 
+    background: var(--bg-body); 
+    color: var(--text-dark); 
+    line-height: 1.6; 
+    /* Adding a subtle gradient to the background */
+    background: linear-gradient(to top, #ecf0f1, #f9fafb);
+}
+a { text-decoration: none; }
+ul { list-style: none; }
+
+/* Keyframe animations to be used */
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+    100% { transform: scale(1); }
+}
+
+/* ================== SIDEBAR ================== */
+.sidebar {
+    width: 260px;
+    height: 100vh;
+    background: linear-gradient(180deg, var(--primary-dark), var(--primary));
+    position: fixed;
+    top: 0;
+    left: 0;
+    padding: 30px 20px;
+    color: var(--white);
+    box-shadow: 4px 0 15px rgba(0,0,0,0.15);
+    z-index: 100;
+    overflow-y: auto;
+    transition: var(--transition);
+}
+
+.sidebar h3 {
+    text-align: center;
+    margin-bottom: 40px;
+    font-size: 18px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+    padding-bottom: 20px;
+}
+
+.sidebar .logo-circle {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    border: 4px solid rgba(255,255,255,0.2);
+    display: block;
+    margin: 0 auto 15px;
+    object-fit: cover;
+    transition: transform 0.4s ease;
+}
+
+.sidebar:hover .logo-circle {
+    transform: rotate(360deg);
+}
+
+.sidebar a {
+    display: flex;
+    align-items: center;
+    padding: 14px 18px; /* Increased padding */
+    color: rgba(255,255,255,0.8);
+    border-radius: 8px;
+    margin-bottom: 8px;
+    transition: var(--transition);
+    cursor: pointer;
+    font-weight: 500;
+    position: relative;
+    overflow: hidden;
+}
+
+.sidebar a::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 100%;
+    width: 4px;
+    background: var(--secondary);
+    transform: scaleY(0);
+    transition: transform 0.3s ease;
+}
+
+.sidebar a i { margin-right: 15px; width: 20px; text-align: center; transition: transform 0.3s ease; }
+.sidebar a:hover, .sidebar a.active-link { background: rgba(0,0,0,0.2); color: var(--white); padding-left: 22px; /* Indent on hover/active */ }
+
+.sidebar a:hover::before, .sidebar a.active-link::before {
+    transform: scaleY(1);
+}
+.sidebar a:hover i {
+    transform: scale(1.2);
+}
+
+/* ================== MAIN CONTENT ================== */
+.main {
+    margin-left: 260px;
+    padding: 40px;
+    min-height: 100vh;
+}
+
+.section { display: none; animation: fadeIn 0.5s ease; }
+.section.active { display: block; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+h1.dash-title, h2 { 
+    color: var(--text-dark); 
+    margin-bottom: 25px; 
+    font-weight: 700; 
+    border-bottom: 2px solid var(--primary);
+    padding-bottom: 10px;
+    display: inline-block;
+}
+
+/* ================== DASHBOARD CARDS ================== */
+.dashboard-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 25px;
+    margin-bottom: 40px;
+}
+
+.dash-card {
+    background: var(--white);
+    padding: 25px;
+    border-radius: 15px;
+    box-shadow: var(--shadow);
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    cursor: pointer;
+    transition: var(--transition);
+    border-left: 5px solid var(--primary);
+    position: relative;
+    overflow: hidden;
+}
+
+.dash-card:hover { 
+    transform: translateY(-8px) scale(1.02); 
+    box-shadow: 0 12px 25px rgba(0,0,0,0.12); 
+    border-color: var(--secondary);
+}
+
+.dash-card::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 100px;
+    height: 100px;
+    background: var(--primary);
+    border-radius: 50%;
+    transform: translate(50%, -50%) scale(0);
+    transition: transform 0.4s ease;
+    opacity: 0.1;
+}
+
+.dash-card:hover::after {
+    transform: translate(50%, -50%) scale(4);
+}
+
+.dash-card .icon-circle {
+    width: 60px;
+    height: 60px;
+    background: var(--accent);
+    color: var(--primary);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    transition: var(--transition);
+    z-index: 1;
+}
+
+.dash-card:hover .icon-circle {
+    background: var(--primary);
+    color: var(--white);
+    transform: rotate(-15deg);
+}
+
+.dash-card h3 { font-size: 28px; margin: 0; color: var(--text-dark); transition: color 0.3s ease; }
+.dash-card p { color: #7f8c8d; font-size: 14px; margin: 0; }
+.dash-card:hover h3 {
+    color: var(--primary-dark);
+}
+
+/* ================== TABLES ================== */
+table { width: 100%; border-collapse: collapse; background: var(--white); border-radius: 10px; overflow: hidden; box-shadow: var(--shadow); margin-bottom: 20px; }
+thead { background: var(--primary-dark); color: var(--white); text-transform: uppercase; letter-spacing: 0.5px; }
+th, td { padding: 15px; text-align: left; border-bottom: 1px solid #eee; }
+tbody tr { transition: background-color 0.2s ease; }
+tbody tr:hover { background-color: var(--accent); }
+tbody tr:last-child td { border-bottom: none; }
+th i { margin-right: 8px; }
+
+/* ================== FORMS ================== */
+input, select, textarea {
+    width: 100%;
+    padding: 12px 15px;
+    margin: 8px 0 20px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background: #fdfdfd;
+    transition: var(--transition);
+    font-size: 14px;
+}
+
+input:focus, select:focus, textarea:focus { 
+    border-color: var(--primary); 
+    outline: none; 
+    box-shadow: 0 0 0 4px var(--accent); 
+    background: var(--white);
+}
+
+.btn, button {
+    padding: 12px 25px;
+    border: none;
+    border-radius: 8px;
+    background: linear-gradient(45deg, var(--primary), var(--secondary));
+    color: var(--white);
+    font-weight: 600;
+    cursor: pointer;
+    transition: var(--transition);
+    display: inline-block;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+}
+
+.btn:hover, button:hover { 
+    opacity: 1; 
+    transform: translateY(-3px); 
+    box-shadow: 0 7px 20px rgba(22, 160, 133, 0.4); 
+}
+.btn:active, button:active {
+    transform: translateY(0);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+}
+
+/* ================== AUTH PAGES (LOGIN/SIGNUP) ================== */
+.auth-container {
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: linear-gradient(135deg, var(--primary-dark), #546e7a);
+    padding: 20px;
+}
+
+.auth-box {
+    display: flex;
+    background: var(--white);
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.2);
+    width: 900px;
+    max-width: 100%;
+    min-height: 500px;
+}
+
+.auth-left {
+    flex: 1;
+    background: linear-gradient(rgba(0, 77, 64, 0.7), rgba(0, 77, 64, 0.7)), url('../images/background.jpg') no-repeat center center;
+    color: var(--white);
+    background-size: cover;
+    padding: 50px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+.auth-right { flex: 1; padding: 50px; display: flex; flex-direction: column; justify-content: center; }
+.auth-right .logo img { width: 120px; height: 120px; margin: 0 auto 20px; display: block; border-radius: 50%; object-fit: cover; }
+.auth-right h2 { text-align: center; color: var(--primary); }
+
+.input-box { position: relative; margin-bottom: 15px; }
+.input-box i { position: absolute; top: 50%; transform: translateY(-50%); color: #aaa; }
+.input-box i.fa-user, .input-box i.fa-lock, .input-box i.fa-user-shield { left: 15px; }
+.input-box i.fa-eye, .input-box i.fa-eye-slash { right: 15px; cursor: pointer; }
+.input-box input, .input-box select { padding-left: 45px; margin-bottom: 0; }
+
+.toggle { text-align: center; margin-top: 20px; color: var(--primary); cursor: pointer; font-weight: 600; }
+.toggle:hover { text-decoration: underline; }
+
+.auth-right form .btn {
+    width: 100%;
+}
+.same-size-btn {
+    width: 100%;
+}
+
+/* ================== MODAL ================== */
+.modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(44, 62, 80, 0.7); /* Darker backdrop */ backdrop-filter: blur(5px); animation: fadeIn 0.3s; }
+.modal-content { background-color: var(--white); margin: 5% auto; padding: 30px; border-radius: 15px; width: 60%; max-width: 700px; box-shadow: 0 10px 30px rgba(0,0,0,0.2); position: relative; animation: slideDown 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94); /* Smoother animation */ }
+@keyframes slideDown { from { transform: translateY(-50px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+.closeModal { position: absolute; right: 15px; top: 10px; font-size: 32px; cursor: pointer; color: #aaa; transition: transform 0.2s, color 0.2s; }
+.closeModal:hover { color: var(--text-dark); transform: rotate(90deg); }
+
+/* ================== UTILITIES ================== */
+.status-badge { padding: 5px 12px; /* More padding */ border-radius: 20px; font-size: 11px; /* Slightly smaller font */ font-weight: 700; /* Bolder */ color: white; text-transform: uppercase; letter-spacing: 0.5px; }
+.status-badge.pending { background: #f39c12; }
+.status-badge.completed, .status-badge.approved { background: #27ae60; }
+.status-badge.submitted { background: #3498db; }
+.status-badge.rescheduled { background: #8e44ad; }
+.status-badge.archived { background: #7f8c8d; }
+.status-badge.cancelled { background: #e74c3c; }
+
+.toast { position: fixed; top: 20px; right: 20px; background: var(--primary); color: white; padding: 15px 25px; border-radius: 8px; box-shadow: 0 5px 15px rgba(0,0,0,0.2); transform: translateX(150%); transition: transform 0.5s cubic-bezier(0.68, -0.55, 0.27, 1.55); /* Bouncy effect */ z-index: 2000; }
+.toast.show { transform: translateX(0); }
+.toast.error { background: #e74c3c; }
+
+/* Modal Details Styling */
+#modalDetails h4 {
+    margin-top: 20px;
+    margin-bottom: 10px;
+    color: var(--primary);
+    border-bottom: 2px solid var(--accent);
+    padding-bottom: 5px;
+}
+
+#modalDetails table {
+    margin-bottom: 20px;
+}
+
+.records-header {
+    margin-bottom: 20px;
+}
+.records-header input {
+    width: 100%;
+    max-width: 400px;
+    margin: 0; /* Override default input margin */
+}
+
+/* ================== DETAILED FORM STYLING ================== */
+.form-container {
+    background: var(--white);
+    padding: 30px;
+    border-radius: 15px;
+    box-shadow: var(--shadow);
+}
+
+.form-container h2 {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 15px;
+    margin-bottom: 25px;
+}
+
+fieldset {
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 25px;
+}
+
+legend {
+    padding: 0 10px;
+    font-weight: 600;
+    color: var(--primary);
+}
+
+label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: 500;
+    font-size: 14px;
+}
+
+.form-grid {
+    display: grid;
+    gap: 20px;
+}
+
+.grid-2 { grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); }
+.grid-3 { grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); }
+.grid-4 { grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); }
+
+/* Custom Modal Detail View */
+#modalDetailsContainer {
+    max-height: 60vh;
+    overflow-y: auto;
+    padding: 10px 5px;
+}
+
+.record-detail-card {
+    background: #f9f9f9;
+    border: 1px solid #eee;
+    border-radius: 10px;
+    padding: 20px;
+    margin-bottom: 20px;
+    box-shadow: var(--shadow);
+}
+
+.record-detail-card h4 {
+    color: var(--primary);
+    margin-top: 0;
+    margin-bottom: 15px;
+    border-bottom: 1px solid #ddd;
+    padding-bottom: 10px;
+}
+
+.record-detail-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 15px;
+}
+
+.record-detail-item { font-size: 14px; line-height: 1.5; }
+.record-detail-item strong { color: var(--text-dark); display: block; margin-bottom: 3px; font-weight: 600; }
+.record-detail-item span { color: #555; }
+
+.record-detail-item pre {
+    background: #e9ecef;
+    padding: 10px;
+    border-radius: 5px;
+    font-size: 12px;
+    white-space: pre-wrap; /* Ensures long lines wrap */
+    word-wrap: break-word;
+    margin-top: 5px;
+}
+/* Checkbox & Radio Groups */
+.checkbox-group, .radio-options {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1px;
+    align-items: center;
+}
+
+.checkbox-group label, .radio-options label { display: flex; align-items: center; gap: 8px; margin-bottom: 0; font-weight: normal; }
+.checkbox-group input, .radio-options input { width: auto; margin: 0; }
+
+.question-group { display: flex; flex-direction: column; gap: 15px; }
+.form-question {
+    display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap;
+    padding: 12px; background: #f9f9f9; border-radius: 8px; gap: 10px;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .sidebar { width: 70px; padding: 20px 10px; }
+    .sidebar:hover {
+        width: 260px; /* Expand on hover on mobile */
+    }
+    .sidebar:hover h3, .sidebar:hover a span {
+        display: inline; /* Show text on hover */
+    }
+    .sidebar h3, .sidebar a span { display: none; } /* Hide text, show icons only */
+    .sidebar a { justify-content: center; padding: 15px; }
+    .sidebar a i { margin: 0; font-size: 20px; }
+    .main { margin-left: 70px; padding: 20px; }
+    .auth-box { flex-direction: column; width: 90%; }
+    .auth-left { display: none; } /* Hide left side on mobile */
+}
+
+.archive-top{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:20px;
+}
+
+.left-actions{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  font-weight:500;
+}
+.right-actions{
+  display:flex;
+  align-items:center;
+}
+.restore-btn{
+  background:#1abc9c;
+  color:white;
+  border:none;
+  padding:8px 18px;
+  border-radius:6px;
+  cursor:pointer;
+  transition:0.3s;
+}
+.restore-btn:hover{
+  background:#16a085;
+}
+
+/* ================== DARK MODE TOGGLE ================== */
+.dark-mode-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 25px;
+    padding: 10px;
+    background: rgba(0,0,0,0.2);
+    border-radius: 50px;
+}
+
+.dark-mode-toggle i.fa-moon {
+    color: #f1c40f; /* Yellow moon */
+}
+
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 50px;
+    height: 24px;
+}
+
+.switch input { 
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #7f8c8d;
+    transition: .4s;
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 18px;
+    width: 18px;
+    left: 3px;
+    bottom: 3px;
+    background-color: white;
+    transition: .4s;
+}
+
+input:checked + .slider {
+    background-color: var(--primary);
+}
+
+input:checked + .slider:before {
+    transform: translateX(26px);
+}
+
+.slider.round {
+    border-radius: 34px;
+}
+
+.slider.round:before {
+    border-radius: 50%;
+}
+
+/* ================== DARK MODE STYLES ================== */
+body.dark-mode {
+    background: var(--dark-bg);
+    color: var(--dark-text);
+    background: linear-gradient(to top, #2c3e50, #34495e);
+}
+
+body.dark-mode .sidebar {
+    background: linear-gradient(180deg, #2c3e50, #23313f);
+    box-shadow: 4px 0 15px rgba(0,0,0,0.25);
+}
+
+body.dark-mode h1.dash-title, 
+body.dark-mode h2 {
+    color: var(--dark-text);
+    border-bottom-color: var(--primary);
+}
+
+body.dark-mode .dash-card,
+body.dark-mode .form-container,
+body.dark-mode .archived-card,
+body.dark-mode .auth-box,
+body.dark-mode table,
+body.dark-mode .modal-content,
+body.dark-mode .record-detail-card {
+    background: var(--dark-surface);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+body.dark-mode .dash-card { border-left-color: var(--primary); }
+body.dark-mode .dash-card h3 { color: var(--dark-text); }
+body.dark-mode .dash-card p { color: var(--dark-text-muted); }
+body.dark-mode .dash-card .icon-circle { background: #2c3e50; color: var(--primary); }
+
+body.dark-mode th, 
+body.dark-mode td,
+body.dark-mode fieldset {
+    border-color: var(--dark-border);
+}
+
+body.dark-mode tbody tr:hover { background-color: #4a627a; }
+
+body.dark-mode input, 
+body.dark-mode select, 
+body.dark-mode textarea {
+    background: #2c3e50;
+    border-color: var(--dark-border);
+    color: var(--dark-text);
+}
+
+body.dark-mode input:focus, 
+body.dark-mode select:focus, 
+body.dark-mode textarea:focus {
+    background: var(--dark-surface);
+    border-color: var(--primary);
+    box-shadow: 0 0 0 4px rgba(26, 188, 156, 0.2);
+}
+
+
+.restore-btn:hover{
+  background:#16a085;
+}
+
+/* ================== DARK MODE TOGGLE ================== */
+.dark-mode-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 25px;
+    padding: 10px;
+    background: rgba(0,0,0,0.2);
+    border-radius: 50px;
+}
+
+.dark-mode-toggle i.fa-moon {
+    color: #f1c40f; /* Yellow moon */
+}
+
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 50px;
+    height: 24px;
+}
+
+.switch input { 
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #7f8c8d;
+    transition: .4s;
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 18px;
+    width: 18px;
+    left: 3px;
+    bottom: 3px;
+    background-color: white;
+    transition: .4s;
+}
+
+input:checked + .slider {
+    background-color: var(--primary);
+}
+
+input:checked + .slider:before {
+    transform: translateX(26px);
+}
+
+.slider.round {
+    border-radius: 34px;
+}
+
+.slider.round:before {
+    border-radius: 50%;
+}
+
+/* ================== DARK MODE STYLES ================== */
+body.dark-mode {
+    background: var(--dark-bg);
+    color: var(--dark-text);
+    background: linear-gradient(to top, #2c3e50, #34495e);
+}
+
+body.dark-mode .sidebar {
+    background: linear-gradient(180deg, #2c3e50, #23313f);
+    box-shadow: 4px 0 15px rgba(0,0,0,0.25);
+}
+
+body.dark-mode h1.dash-title, 
+body.dark-mode h2 {
+    color: var(--dark-text);
+    border-bottom-color: var(--primary);
+}
+
+body.dark-mode .dash-card,
+body.dark-mode .form-container,
+body.dark-mode .archived-card,
+body.dark-mode .auth-box,
+body.dark-mode table,
+body.dark-mode .modal-content,
+body.dark-mode .record-detail-card {
+    background: var(--dark-surface);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+body.dark-mode .dash-card { border-left-color: var(--primary); }
+body.dark-mode .dash-card h3 { color: var(--dark-text); }
+body.dark-mode .dash-card p { color: var(--dark-text-muted); }
+body.dark-mode .dash-card .icon-circle { background: #2c3e50; color: var(--primary); }
+
+body.dark-mode th, 
+body.dark-mode td,
+body.dark-mode fieldset {
+    border-color: var(--dark-border);
+}
+
+body.dark-mode tbody tr:hover { background-color: #4a627a; }
+
+body.dark-mode input, 
+body.dark-mode select, 
+body.dark-mode textarea {
+    background: #2c3e50;
+    border-color: var(--dark-border);
+    color: var(--dark-text);
+}
+
+body.dark-mode input:focus, 
+body.dark-mode select:focus, 
+body.dark-mode textarea:focus {
+    background: var(--dark-surface);
+    border-color: var(--primary);
+    box-shadow: 0 0 0 4px rgba(26, 188, 156, 0.2);
+}
+
+
+.restore-btn:hover{
+  background:#16a085;
+}
+
+/* ================== DARK MODE TOGGLE ================== */
+.dark-mode-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 25px;
+    padding: 10px;
+    background: rgba(0,0,0,0.2);
+    border-radius: 50px;
+}
+
+.dark-mode-toggle i.fa-moon {
+    color: #f1c40f; /* Yellow moon */
+}
+
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 50px;
+    height: 24px;
+}
+
+.switch input { 
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #7f8c8d;
+    transition: .4s;
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 18px;
+    width: 18px;
+    left: 3px;
+    bottom: 3px;
+    background-color: white;
+    transition: .4s;
+}
+
+input:checked + .slider {
+    background-color: var(--primary);
+}
+
+input:checked + .slider:before {
+    transform: translateX(26px);
+}
+
+.slider.round {
+    border-radius: 34px;
+}
+
+.slider.round:before {
+    border-radius: 50%;
+}
+
+/* ================== DARK MODE STYLES ================== */
+body.dark-mode {
+    background: var(--dark-bg);
+    color: var(--dark-text);
+    background: linear-gradient(to top, #2c3e50, #34495e);
+}
+
+body.dark-mode .sidebar {
+    background: linear-gradient(180deg, #2c3e50, #23313f);
+    box-shadow: 4px 0 15px rgba(0,0,0,0.25);
+}
+
+body.dark-mode h1.dash-title, 
+body.dark-mode h2 {
+    color: var(--dark-text);
+    border-bottom-color: var(--primary);
+}
+
+body.dark-mode .dash-card,
+body.dark-mode .form-container,
+body.dark-mode .archived-card,
+body.dark-mode .auth-box,
+body.dark-mode table,
+body.dark-mode .modal-content,
+body.dark-mode .record-detail-card {
+    background: var(--dark-surface);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+body.dark-mode .dash-card { border-left-color: var(--primary); }
+body.dark-mode .dash-card h3 { color: var(--dark-text); }
+body.dark-mode .dash-card p { color: var(--dark-text-muted); }
+body.dark-mode .dash-card .icon-circle { background: #2c3e50; color: var(--primary); }
+
+body.dark-mode th, 
+body.dark-mode td,
+body.dark-mode fieldset {
+    border-color: var(--dark-border);
+}
+
+body.dark-mode tbody tr:hover { background-color: #4a627a; }
+
+body.dark-mode input, 
+body.dark-mode select, 
+body.dark-mode textarea {
+    background: #2c3e50;
+    border-color: var(--dark-border);
+    color: var(--dark-text);
+}
+
+body.dark-mode input:focus, 
+body.dark-mode select:focus, 
+body.dark-mode textarea:focus {
+    background: var(--dark-surface);
+    border-color: var(--primary);
+    box-shadow: 0 0 0 4px rgba(26, 188, 156, 0.2);
+}
+
+body.dark-mode .form-question { background: var(--dark-bg);
+ border-radius:6px;
+  cursor:pointer;
+  transition:0.3s;
+} 
+
+
+.restore-btn:hover{
+  background:#16a085;
+}
+
+/* ================== DARK MODE TOGGLE ================== */
+.dark-mode-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 25px;
+    padding: 10px;
+    background: rgba(0,0,0,0.2);
+    border-radius: 50px;
+}
+
+.dark-mode-toggle i.fa-moon {
+    color: #f1c40f; /* Yellow moon */
+}
+
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 50px;
+    height: 24px;
+}
+
+.switch input { 
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #7f8c8d;
+    transition: .4s;
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 18px;
+    width: 18px;
+    left: 3px;
+    bottom: 3px;
+    background-color: white;
+    transition: .4s;
+}
+
+input:checked + .slider {
+    background-color: var(--primary);
+}
+
+input:checked + .slider:before {
+    transform: translateX(26px);
+}
+
+.slider.round {
+    border-radius: 34px;
+}
+
+.slider.round:before {
+    border-radius: 50%;
+}
+
+/* ================== DARK MODE STYLES ================== */
+body.dark-mode {
+    background: var(--dark-bg);
+    color: var(--dark-text);
+    background: linear-gradient(to top, #2c3e50, #34495e);
+}
+
+body.dark-mode .sidebar {
+    background: linear-gradient(180deg, #2c3e50, #23313f);
+    box-shadow: 4px 0 15px rgba(0,0,0,0.25);
+}
+
+body.dark-mode h1.dash-title, 
+body.dark-mode h2 {
+    color: var(--dark-text);
+    border-bottom-color: var(--primary);
+}
+
+body.dark-mode .dash-card,
+body.dark-mode .form-container,
+body.dark-mode .archived-card,
+body.dark-mode .auth-box,
+body.dark-mode table,
+body.dark-mode .modal-content,
+body.dark-mode .record-detail-card {
+    background: var(--dark-surface);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+body.dark-mode .dash-card { border-left-color: var(--primary); }
+body.dark-mode .dash-card h3 { color: var(--dark-text); }
+body.dark-mode .dash-card p { color: var(--dark-text-muted); }
+body.dark-mode .dash-card .icon-circle { background: #2c3e50; color: var(--primary); }
+
+body.dark-mode th, 
+body.dark-mode td,
+body.dark-mode fieldset {
+    border-color: var(--dark-border);
+}
+
+body.dark-mode tbody tr:hover { background-color: #4a627a; }
+
+body.dark-mode input, 
+body.dark-mode select, 
+body.dark-mode textarea {
+    background: #2c3e50;
+    border-color: var(--dark-border);
+    color: var(--dark-text);
+}
+
+body.dark-mode input:focus, 
+body.dark-mode select:focus, 
+body.dark-mode textarea:focus {
+    background: var(--dark-surface);
+    border-color: var(--primary);
+    box-shadow: 0 0 0 4px rgba(26, 188, 156, 0.2);
+}
+
+body.dark-mode .form-question { background: var(--dark-bg);
+border-radius:6px;
+  cursor:pointer;
+  transition:0.3s;
+} 
+.restore-btn:hover{
+  background:#16a085;
+}
+
+/* ================== DARK MODE TOGGLE ================== */
+.dark-mode-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 25px;
+    padding: 10px;
+    background: rgba(0,0,0,0.2);
+    border-radius: 50px;
+}
+
+.dark-mode-toggle i.fa-moon {
+    color: #f1c40f; /* Yellow moon */
+}
+
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 50px;
+    height: 24px;
+}
+
+.switch input { 
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #7f8c8d;
+    transition: .4s;
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 18px;
+    width: 18px;
+    left: 3px;
+    bottom: 3px;
+    background-color: white;
+    transition: .4s;
+}
+
+input:checked + .slider {
+    background-color: var(--primary);
+}
+
+input:checked + .slider:before {
+    transform: translateX(26px);
+}
+
+.slider.round {
+    border-radius: 34px;
+}
+
+.slider.round:before {
+    border-radius: 50%;
+}
+
+/* ================== DARK MODE STYLES ================== */
+body.dark-mode {
+    background: var(--dark-bg);
+    color: var(--dark-text);
+    background: linear-gradient(to top, #2c3e50, #34495e);
+}
+
+body.dark-mode .sidebar {
+    background: linear-gradient(180deg, #2c3e50, #23313f);
+    box-shadow: 4px 0 15px rgba(0,0,0,0.25);
+}
+
+body.dark-mode h1.dash-title, 
+body.dark-mode h2 {
+    color: var(--dark-text);
+    border-bottom-color: var(--primary);
+}
+
+body.dark-mode .dash-card,
+body.dark-mode .form-container,
+body.dark-mode .archived-card,
+body.dark-mode .auth-box,
+body.dark-mode table,
+body.dark-mode .modal-content,
+body.dark-mode .record-detail-card {
+    background: var(--dark-surface);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+body.dark-mode .dash-card { border-left-color: var(--primary); }
+body.dark-mode .dash-card h3 { color: var(--dark-text); }
+body.dark-mode .dash-card p { color: var(--dark-text-muted); }
+body.dark-mode .dash-card .icon-circle { background: #2c3e50; color: var(--primary); }
+
+body.dark-mode th, 
+body.dark-mode td,
+body.dark-mode fieldset {
+    border-color: var(--dark-border);
+}
+
+body.dark-mode tbody tr:hover { background-color: #4a627a; }
+
+body.dark-mode input, 
+body.dark-mode select, 
+body.dark-mode textarea {
+    background: #2c3e50;
+    border-color: var(--dark-border);
+    color: var(--dark-text);
+}
+
+body.dark-mode input:focus, 
+body.dark-mode select:focus, 
+body.dark-mode textarea:focus {
+    background: var(--dark-surface);
+    border-color: var(--primary);
+    box-shadow: 0 0 0 4px rgba(26, 188, 156, 0.2);
+}
+
+
+.restore-btn:hover{
+  background:#16a085;
+}
+
+/* ================== DARK MODE TOGGLE ================== */
+.dark-mode-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 25px;
+    padding: 10px;
+    background: rgba(0,0,0,0.2);
+    border-radius: 50px;
+}
+
+.dark-mode-toggle i.fa-moon {
+    color: #f1c40f; /* Yellow moon */
+}
+
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 50px;
+    height: 24px;
+}
+
+.switch input { 
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #7f8c8d;
+    transition: .4s;
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 18px;
+    width: 18px;
+    left: 3px;
+    bottom: 3px;
+    background-color: white;
+    transition: .4s;
+}
+
+input:checked + .slider {
+    background-color: var(--primary);
+}
+
+input:checked + .slider:before {
+    transform: translateX(26px);
+}
+
+.slider.round {
+    border-radius: 34px;
+}
+
+.slider.round:before {
+    border-radius: 50%;
+}
+
+/* ================== DARK MODE STYLES ================== */
+body.dark-mode {
+    background: var(--dark-bg);
+    color: var(--dark-text);
+    background: linear-gradient(to top, #2c3e50, #34495e);
+}
+
+body.dark-mode .sidebar {
+    background: linear-gradient(180deg, #2c3e50, #23313f);
+    box-shadow: 4px 0 15px rgba(0,0,0,0.25);
+}
+
+body.dark-mode h1.dash-title, 
+body.dark-mode h2 {
+    color: var(--dark-text);
+    border-bottom-color: var(--primary);
+}
+
+body.dark-mode .dash-card,
+body.dark-mode .form-container,
+body.dark-mode .archived-card,
+body.dark-mode .auth-box,
+body.dark-mode table,
+body.dark-mode .modal-content,
+body.dark-mode .record-detail-card {
+    background: var(--dark-surface);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+body.dark-mode .dash-card { border-left-color: var(--primary); }
+body.dark-mode .dash-card h3 { color: var(--dark-text); }
+body.dark-mode .dash-card p { color: var(--dark-text-muted); }
+body.dark-mode .dash-card .icon-circle { background: #2c3e50; color: var(--primary); }
+
+body.dark-mode th, 
+body.dark-mode td,
+body.dark-mode fieldset {
+    border-color: var(--dark-border);
+}
+
+body.dark-mode tbody tr:hover { background-color: #4a627a; }
+
+body.dark-mode input, 
+body.dark-mode select, 
+body.dark-mode textarea {
+    background: #2c3e50;
+    border-color: var(--dark-border);
+    color: var(--dark-text);
+}
+
+body.dark-mode input:focus, 
+body.dark-mode select:focus, 
+body.dark-mode textarea:focus {
+    background: var(--dark-surface);
+    border-color: var(--primary);
+    box-shadow: 0 0 0 4px rgba(26, 188, 156, 0.2);
+}
+
+body.dark-mode .form-question { background: var(--dark-bg);
+  border-radius:6px;
+  cursor:pointer;
+  transition:0.3s;
+
+
+}
+.restore-btn:hover{
+  background:#16a085;
+}
+
+/* ================== DARK MODE TOGGLE ================== */
+.dark-mode-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 25px;
+    padding: 10px;
+    background: rgba(0,0,0,0.2);
+    border-radius: 50px;
+}
+
+.dark-mode-toggle i.fa-moon {
+    color: #f1c40f; /* Yellow moon */
+}
+
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 50px;
+    height: 24px;
+}
+
+.switch input { 
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #7f8c8d;
+    transition: .4s;
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 18px;
+    width: 18px;
+    left: 3px;
+    bottom: 3px;
+    background-color: white;
+    transition: .4s;
+}
+
+input:checked + .slider {
+    background-color: var(--primary);
+}
+
+input:checked + .slider:before {
+    transform: translateX(26px);
+}
+
+.slider.round {
+    border-radius: 34px;
+}
+
+.slider.round:before {
+    border-radius: 50%;
+}
+
+/* ================== DARK MODE STYLES ================== */
+body.dark-mode {
+    background: var(--dark-bg);
+    color: var(--dark-text);
+    background: linear-gradient(to top, #2c3e50, #34495e);
+}
+
+body.dark-mode .sidebar {
+    background: linear-gradient(180deg, #2c3e50, #23313f);
+    box-shadow: 4px 0 15px rgba(0,0,0,0.25);
+}
+
+body.dark-mode h1.dash-title, 
+body.dark-mode h2 {
+    color: var(--dark-text);
+    border-bottom-color: var(--primary);
+}
+
+body.dark-mode .dash-card,
+body.dark-mode .form-container,
+body.dark-mode .archived-card,
+body.dark-mode .auth-box,
+body.dark-mode table,
+body.dark-mode .modal-content,
+body.dark-mode .record-detail-card {
+    background: var(--dark-surface);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+body.dark-mode .dash-card { border-left-color: var(--primary); }
+body.dark-mode .dash-card h3 { color: var(--dark-text); }
+body.dark-mode .dash-card p { color: var(--dark-text-muted); }
+body.dark-mode .dash-card .icon-circle { background: #2c3e50; color: var(--primary); }
+
+body.dark-mode th, 
+body.dark-mode td,
+body.dark-mode fieldset {
+    border-color: var(--dark-border);
+}
+
+body.dark-mode tbody tr:hover { background-color: #4a627a; }
+
+body.dark-mode input, 
+body.dark-mode select, 
+body.dark-mode textarea {
+    background: #2c3e50;
+    border-color: var(--dark-border);
+    color: var(--dark-text);
+}
+
+body.dark-mode input:focus, 
+body.dark-mode select:focus, 
+body.dark-mode textarea:focus {
+    background: var(--dark-surface);
+    border-color: var(--primary);
+    box-shadow: 0 0 0 4px rgba(26, 188, 156, 0.2);
+}
+
+body.dark-mode .form-question { background: var(--dark-bg); 
+ border-radius:6px;
+  cursor:pointer;
+  transition:0.3s;
+}
+
+.restore-btn:hover{
+  background:#16a085;
+}
+
+/* ================== DARK MODE TOGGLE ================== */
+.dark-mode-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 25px;
+    padding: 10px;
+    background: rgba(0,0,0,0.2);
+    border-radius: 50px;
+}
+
+.dark-mode-toggle i.fa-moon {
+    color: #f1c40f; /* Yellow moon */
+}
+
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 50px;
+    height: 24px;
+}
+
+.switch input { 
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #7f8c8d;
+    transition: .4s;
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 18px;
+    width: 18px;
+    left: 3px;
+    bottom: 3px;
+    background-color: white;
+    transition: .4s;
+}
+
+input:checked + .slider {
+    background-color: var(--primary);
+}
+
+input:checked + .slider:before {
+    transform: translateX(26px);
+}
+
+.slider.round {
+    border-radius: 34px;
+}
+
+.slider.round:before {
+    border-radius: 50%;
+}
+
+/* ================== DARK MODE STYLES ================== */
+body.dark-mode {
+    background: var(--dark-bg);
+    color: var(--dark-text);
+    background: linear-gradient(to top, #2c3e50, #34495e);
+}
+
+body.dark-mode .sidebar {
+    background: linear-gradient(180deg, #2c3e50, #23313f);
+    box-shadow: 4px 0 15px rgba(0,0,0,0.25);
+}
+
+body.dark-mode h1.dash-title, 
+body.dark-mode h2 {
+    color: var(--dark-text);
+    border-bottom-color: var(--primary);
+}
+
+body.dark-mode .dash-card,
+body.dark-mode .form-container,
+body.dark-mode .archived-card,
+body.dark-mode .auth-box,
+body.dark-mode table,
+body.dark-mode .modal-content,
+body.dark-mode .record-detail-card {
+    background: var(--dark-surface);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+body.dark-mode .dash-card { border-left-color: var(--primary); }
+body.dark-mode .dash-card h3 { color: var(--dark-text); }
+body.dark-mode .dash-card p { color: var(--dark-text-muted); }
+body.dark-mode .dash-card .icon-circle { background: #2c3e50; color: var(--primary); }
+
+body.dark-mode th, 
+body.dark-mode td,
+body.dark-mode fieldset {
+    border-color: var(--dark-border);
+}
+
+body.dark-mode tbody tr:hover { background-color: #4a627a; }
+
+body.dark-mode input, 
+body.dark-mode select, 
+body.dark-mode textarea {
+    background: #2c3e50;
+    border-color: var(--dark-border);
+    color: var(--dark-text);
+}
+
+body.dark-mode input:focus, 
+body.dark-mode select:focus, 
+body.dark-mode textarea:focus {
+    background: var(--dark-surface);
+    border-color: var(--primary);
+    box-shadow: 0 0 0 4px rgba(26, 188, 156, 0.2);
+}
+
+body.dark-mode .form-question { background: var(--dark-bg); 
+ border-radius:6px;
+  cursor:pointer;
+  transition:0.3s;
+}
+
+.restore-btn:hover{
+  background:#16a085;
+}
+
+/* ================== DARK MODE TOGGLE ================== */
+.dark-mode-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 25px;
+    padding: 10px;
+    background: rgba(0,0,0,0.2);
+    border-radius: 50px;
+}
+
+.dark-mode-toggle i.fa-moon {
+    color: #f1c40f; /* Yellow moon */
+}
+
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 50px;
+    height: 24px;
+}
+
+.switch input { 
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #7f8c8d;
+    transition: .4s;
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 18px;
+    width: 18px;
+    left: 3px;
+    bottom: 3px;
+    background-color: white;
+    transition: .4s;
+}
+
+input:checked + .slider {
+    background-color: var(--primary);
+}
+
+input:checked + .slider:before {
+    transform: translateX(26px);
+}
+
+.slider.round {
+    border-radius: 34px;
+}
+
+.slider.round:before {
+    border-radius: 50%;
+}
+
+/* ================== DARK MODE STYLES ================== */
+body.dark-mode {
+    background: var(--dark-bg);
+    color: var(--dark-text);
+    background: linear-gradient(to top, #2c3e50, #34495e);
+}
+
+body.dark-mode .sidebar {
+    background: linear-gradient(180deg, #2c3e50, #23313f);
+    box-shadow: 4px 0 15px rgba(0,0,0,0.25);
+}
+
+body.dark-mode h1.dash-title, 
+body.dark-mode h2 {
+    color: var(--dark-text);
+    border-bottom-color: var(--primary);
+}
+
+body.dark-mode .dash-card,
+body.dark-mode .form-container,
+body.dark-mode .archived-card,
+body.dark-mode .auth-box,
+body.dark-mode table,
+body.dark-mode .modal-content,
+body.dark-mode .record-detail-card {
+    background: var(--dark-surface);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+body.dark-mode .dash-card { border-left-color: var(--primary); }
+body.dark-mode .dash-card h3 { color: var(--dark-text); }
+body.dark-mode .dash-card p { color: var(--dark-text-muted); }
+body.dark-mode .dash-card .icon-circle { background: #2c3e50; color: var(--primary); }
+
+body.dark-mode th, 
+body.dark-mode td,
+body.dark-mode fieldset {
+    border-color: var(--dark-border);
+}
+
+body.dark-mode tbody tr:hover { background-color: #4a627a; }
+
+body.dark-mode input, 
+body.dark-mode select, 
+body.dark-mode textarea {
+    background: #2c3e50;
+    border-color: var(--dark-border);
+    color: var(--dark-text);
+}
+
+body.dark-mode input:focus, 
+body.dark-mode select:focus, 
+body.dark-mode textarea:focus {
+    background: var(--dark-surface);
+    border-color: var(--primary);
+    box-shadow: 0 0 0 4px rgba(26, 188, 156, 0.2);
+}
+
+body.dark-mode .form-question { background: var(--dark-bg); 
+ border-radius:6px;
+  cursor:pointer;
+  transition:0.3s;
+}
+
+.restore-btn:hover{
+  background:#16a085;
+}
+
+/* ================== DARK MODE TOGGLE ================== */
+.dark-mode-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 25px;
+    padding: 10px;
+    background: rgba(0,0,0,0.2);
+    border-radius: 50px;
+}
+
+.dark-mode-toggle i.fa-moon {
+    color: #f1c40f; /* Yellow moon */
+}
+
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 50px;
+    height: 24px;
+}
+
+.switch input { 
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #7f8c8d;
+    transition: .4s;
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 18px;
+    width: 18px;
+    left: 3px;
+    bottom: 3px;
+    background-color: white;
+    transition: .4s;
+}
+
+input:checked + .slider {
+    background-color: var(--primary);
+}
+
+input:checked + .slider:before {
+    transform: translateX(26px);
+}
+
+.slider.round {
+    border-radius: 34px;
+}
+
+.slider.round:before {
+    border-radius: 50%;
+}
+
+/* ================== DARK MODE STYLES ================== */
+body.dark-mode {
+    background: var(--dark-bg);
+    color: var(--dark-text);
+    background: linear-gradient(to top, #2c3e50, #34495e);
+}
+
+body.dark-mode .sidebar {
+    background: linear-gradient(180deg, #2c3e50, #23313f);
+    box-shadow: 4px 0 15px rgba(0,0,0,0.25);
+}
+
+body.dark-mode h1.dash-title, 
+body.dark-mode h2 {
+    color: var(--dark-text);
+    border-bottom-color: var(--primary);
+}
+
+body.dark-mode .dash-card,
+body.dark-mode .form-container,
+body.dark-mode .archived-card,
+body.dark-mode .auth-box,
+body.dark-mode table,
+body.dark-mode .modal-content,
+body.dark-mode .record-detail-card {
+    background: var(--dark-surface);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+body.dark-mode .dash-card { border-left-color: var(--primary); }
+body.dark-mode .dash-card h3 { color: var(--dark-text); }
+body.dark-mode .dash-card p { color: var(--dark-text-muted); }
+body.dark-mode .dash-card .icon-circle { background: #2c3e50; color: var(--primary); }
+
+body.dark-mode th, 
+body.dark-mode td,
+body.dark-mode fieldset {
+    border-color: var(--dark-border);
+}
+
+body.dark-mode tbody tr:hover { background-color: #4a627a; }
+
+body.dark-mode input, 
+body.dark-mode select, 
+body.dark-mode textarea {
+    background: #2c3e50;
+    border-color: var(--dark-border);
+    color: var(--dark-text);
+}
+
+body.dark-mode input:focus, 
+body.dark-mode select:focus, 
+body.dark-mode textarea:focus {
+    background: var(--dark-surface);
+    border-color: var(--primary);
+    box-shadow: 0 0 0 4px rgba(26, 188, 156, 0.2);
+}
+
+body.dark-mode .form-question { background: var(--dark-bg); 
+ border-radius:6px;
+  cursor:pointer;
+  transition:0.3s;
+}
+
+.restore-btn:hover{
+  background:#16a085;
+}
+
+/* ================== DARK MODE TOGGLE ================== */
+.dark-mode-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 25px;
+    padding: 10px;
+    background: rgba(0,0,0,0.2);
+    border-radius: 50px;
+}
+
+.dark-mode-toggle i.fa-moon {
+    color: #f1c40f; /* Yellow moon */
+}
+
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 50px;
+    height: 24px;
+}
+
+.switch input { 
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #7f8c8d;
+    transition: .4s;
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 18px;
+    width: 18px;
+    left: 3px;
+    bottom: 3px;
+    background-color: white;
+    transition: .4s;
+}
+
+input:checked + .slider {
+    background-color: var(--primary);
+}
+
+input:checked + .slider:before {
+    transform: translateX(26px);
+}
+
+.slider.round {
+    border-radius: 34px;
+}
+
+.slider.round:before {
+    border-radius: 50%;
+}
+
+/* ================== DARK MODE STYLES ================== */
+body.dark-mode {
+    background: var(--dark-bg);
+    color: var(--dark-text);
+    background: linear-gradient(to top, #2c3e50, #34495e);
+}
+
+body.dark-mode .sidebar {
+    background: linear-gradient(180deg, #2c3e50, #23313f);
+    box-shadow: 4px 0 15px rgba(0,0,0,0.25);
+}
+
+body.dark-mode h1.dash-title, 
+body.dark-mode h2 {
+    color: var(--dark-text);
+    border-bottom-color: var(--primary);
+}
+
+body.dark-mode .dash-card,
+body.dark-mode .form-container,
+body.dark-mode .archived-card,
+body.dark-mode .auth-box,
+body.dark-mode table,
+body.dark-mode .modal-content,
+body.dark-mode .record-detail-card {
+    background: var(--dark-surface);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+body.dark-mode .dash-card { border-left-color: var(--primary); }
+body.dark-mode .dash-card h3 { color: var(--dark-text); }
+body.dark-mode .dash-card p { color: var(--dark-text-muted); }
+body.dark-mode .dash-card .icon-circle { background: #2c3e50; color: var(--primary); }
+
+body.dark-mode th, 
+body.dark-mode td,
+body.dark-mode fieldset {
+    border-color: var(--dark-border);
+}
+
+body.dark-mode tbody tr:hover { background-color: #4a627a; }
+
+body.dark-mode input, 
+body.dark-mode select, 
+body.dark-mode textarea {
+    background: #2c3e50;
+    border-color: var(--dark-border);
+    color: var(--dark-text);
+}
+
+body.dark-mode input:focus, 
+body.dark-mode select:focus, 
+body.dark-mode textarea:focus {
+    background: var(--dark-surface);
+    border-color: var(--primary);
+    box-shadow: 0 0 0 4px rgba(26, 188, 156, 0.2);
+}
+
+body.dark-mode .form-question { background: var(--dark-bg); 
+ border-radius:6px;
+  cursor:pointer;
+  transition:0.3s;
+}
+
+.restore-btn:hover{
+  background:#16a085;
+}
+
+/* ================== DARK MODE TOGGLE ================== */
+.dark-mode-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 25px;
+    padding: 10px;
+    background: rgba(0,0,0,0.2);
+    border-radius: 50px;
+}
+
+.dark-mode-toggle i.fa-moon {
+    color: #f1c40f; /* Yellow moon */
+}
+
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 50px;
+    height: 24px;
+}
+
+.switch input { 
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #7f8c8d;
+    transition: .4s;
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 18px;
+    width: 18px;
+    left: 3px;
+    bottom: 3px;
+    background-color: white;
+    transition: .4s;
+}
+
+input:checked + .slider {
+    background-color: var(--primary);
+}
+
+input:checked + .slider:before {
+    transform: translateX(26px);
+}
+
+.slider.round {
+    border-radius: 34px;
+}
+
+.slider.round:before {
+    border-radius: 50%;
+}
+
+/* ================== DARK MODE STYLES ================== */
+body.dark-mode {
+    background: var(--dark-bg);
+    color: var(--dark-text);
+    background: linear-gradient(to top, #2c3e50, #34495e);
+}
+
+body.dark-mode .sidebar {
+    background: linear-gradient(180deg, #2c3e50, #23313f);
+    box-shadow: 4px 0 15px rgba(0,0,0,0.25);
+}
+
+body.dark-mode h1.dash-title, 
+body.dark-mode h2 {
+    color: var(--dark-text);
+    border-bottom-color: var(--primary);
+}
+
+body.dark-mode .dash-card,
+body.dark-mode .form-container,
+body.dark-mode .archived-card,
+body.dark-mode .auth-box,
+body.dark-mode table,
+body.dark-mode .modal-content,
+body.dark-mode .record-detail-card {
+    background: var(--dark-surface);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+body.dark-mode .dash-card { border-left-color: var(--primary); }
+body.dark-mode .dash-card h3 { color: var(--dark-text); }
+body.dark-mode .dash-card p { color: var(--dark-text-muted); }
+body.dark-mode .dash-card .icon-circle { background: #2c3e50; color: var(--primary); }
+
+body.dark-mode th, 
+body.dark-mode td,
+body.dark-mode fieldset {
+    border-color: var(--dark-border);
+}
+
+body.dark-mode tbody tr:hover { background-color: #4a627a; }
+
+body.dark-mode input, 
+body.dark-mode select, 
+body.dark-mode textarea {
+    background: #2c3e50;
+    border-color: var(--dark-border);
+    color: var(--dark-text);
+}
+
+body.dark-mode input:focus, 
+body.dark-mode select:focus, 
+body.dark-mode textarea:focus {
+    background: var(--dark-surface);
+    border-color: var(--primary);
+    box-shadow: 0 0 0 4px rgba(26, 188, 156, 0.2);
+}
+
+body.dark-mode .form-question { background: var(--dark-bg); 
+ border-radius:6px;
+  cursor:pointer;
+  transition:0.3s;
+}
+
+.restore-btn:hover{
+  background:#16a085;
+}
+
+/* ================== DARK MODE TOGGLE ================== */
+.dark-mode-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 25px;
+    padding: 10px;
+    background: rgba(0,0,0,0.2);
+    border-radius: 50px;
+}
+
+.dark-mode-toggle i.fa-moon {
+    color: #f1c40f; /* Yellow moon */
+}
+
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 50px;
+    height: 24px;
+}
+
+.switch input { 
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #7f8c8d;
+    transition: .4s;
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 18px;
+    width: 18px;
+    left: 3px;
+    bottom: 3px;
+    background-color: white;
+    transition: .4s;
+}
+
+input:checked + .slider {
+    background-color: var(--primary);
+}
+
+input:checked + .slider:before {
+    transform: translateX(26px);
+}
+
+.slider.round {
+    border-radius: 34px;
+}
+
+.slider.round:before {
+    border-radius: 50%;
+}
+
+/* ================== DARK MODE STYLES ================== */
+body.dark-mode {
+    background: var(--dark-bg);
+    color: var(--dark-text);
+    background: linear-gradient(to top, #2c3e50, #34495e);
+}
+
+body.dark-mode .sidebar {
+    background: linear-gradient(180deg, #2c3e50, #23313f);
+    box-shadow: 4px 0 15px rgba(0,0,0,0.25);
+}
+
+body.dark-mode h1.dash-title, 
+body.dark-mode h2 {
+    color: var(--dark-text);
+    border-bottom-color: var(--primary);
+}
+
+body.dark-mode .dash-card,
+body.dark-mode .form-container,
+body.dark-mode .archived-card,
+body.dark-mode .auth-box,
+body.dark-mode table,
+body.dark-mode .modal-content,
+body.dark-mode .record-detail-card {
+    background: var(--dark-surface);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+body.dark-mode .dash-card { border-left-color: var(--primary); }
+body.dark-mode .dash-card h3 { color: var(--dark-text); }
+body.dark-mode .dash-card p { color: var(--dark-text-muted); }
+body.dark-mode .dash-card .icon-circle { background: #2c3e50; color: var(--primary); }
+
+body.dark-mode th, 
+body.dark-mode td,
+body.dark-mode fieldset {
+    border-color: var(--dark-border);
+}
+
+body.dark-mode tbody tr:hover { background-color: #4a627a; }
+
+body.dark-mode input, 
+body.dark-mode select, 
+body.dark-mode textarea {
+    background: #2c3e50;
+    border-color: var(--dark-border);
+    color: var(--dark-text);
+}
+
+body.dark-mode input:focus, 
+body.dark-mode select:focus, 
+body.dark-mode textarea:focus {
+    background: var(--dark-surface);
+    border-color: var(--primary);
+    box-shadow: 0 0 0 4px rgba(26, 188, 156, 0.2);
+}
+
+body.dark-mode .form-question { background: var(--dark-bg); 
+ border-radius:6px;
+  cursor:pointer;
+  transition:0.3s;
+}
+
+.restore-btn:hover{
+  background:#16a085;
+}
+
+/* ================== DARK MODE TOGGLE ================== */
+.dark-mode-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 25px;
+    padding: 10px;
+    background: rgba(0,0,0,0.2);
+    border-radius: 50px;
+}
+
+.dark-mode-toggle i.fa-moon {
+    color: #f1c40f; /* Yellow moon */
+}
+
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 50px;
+    height: 24px;
+}
+
+.switch input { 
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #7f8c8d;
+    transition: .4s;
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 18px;
+    width: 18px;
+    left: 3px;
+    bottom: 3px;
+    background-color: white;
+    transition: .4s;
+}
+
+input:checked + .slider {
+    background-color: var(--primary);
+}
+
+input:checked + .slider:before {
+    transform: translateX(26px);
+}
+
+.slider.round {
+    border-radius: 34px;
+}
+
+.slider.round:before {
+    border-radius: 50%;
+}
+
+/* ================== DARK MODE STYLES ================== */
+body.dark-mode {
+    background: var(--dark-bg);
+    color: var(--dark-text);
+    background: linear-gradient(to top, #2c3e50, #34495e);
+}
+
+body.dark-mode .sidebar {
+    background: linear-gradient(180deg, #2c3e50, #23313f);
+    box-shadow: 4px 0 15px rgba(0,0,0,0.25);
+}
+
+body.dark-mode h1.dash-title, 
+body.dark-mode h2 {
+    color: var(--dark-text);
+    border-bottom-color: var(--primary);
+}
+
+body.dark-mode .dash-card,
+body.dark-mode .form-container,
+body.dark-mode .archived-card,
+body.dark-mode .auth-box,
+body.dark-mode table,
+body.dark-mode .modal-content,
+body.dark-mode .record-detail-card {
+    background: var(--dark-surface);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+body.dark-mode .dash-card { border-left-color: var(--primary); }
+body.dark-mode .dash-card h3 { color: var(--dark-text); }
+body.dark-mode .dash-card p { color: var(--dark-text-muted); }
+body.dark-mode .dash-card .icon-circle { background: #2c3e50; color: var(--primary); }
+
+body.dark-mode th, 
+body.dark-mode td,
+body.dark-mode fieldset {
+    border-color: var(--dark-border);
+}
+
+body.dark-mode tbody tr:hover { background-color: #4a627a; }
+
+body.dark-mode input, 
+body.dark-mode select, 
+body.dark-mode textarea {
+    background: #2c3e50;
+    border-color: var(--dark-border);
+    color: var(--dark-text);
+}
+
+body.dark-mode input:focus, 
+body.dark-mode select:focus, 
+body.dark-mode textarea:focus {
+    background: var(--dark-surface);
+    border-color: var(--primary);
+    box-shadow: 0 0 0 4px rgba(26, 188, 156, 0.2);
+}
+
+body.dark-mode .form-question { background: var(--dark-bg); 
+border-radius:6px;
+  cursor:pointer;
+  transition:0.3s;
+}
+
+.restore-btn:hover{
+  background:#16a085;
+}
+
+/* ================== DARK MODE TOGGLE ================== */
+.dark-mode-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 25px;
+    padding: 10px;
+    background: rgba(0,0,0,0.2);
+    border-radius: 50px;
+}
+
+.dark-mode-toggle i.fa-moon {
+    color: #f1c40f; /* Yellow moon */
+}
+
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 50px;
+    height: 24px;
+}
+
+.switch input { 
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #7f8c8d;
+    transition: .4s;
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 18px;
+    width: 18px;
+    left: 3px;
+    bottom: 3px;
+    background-color: white;
+    transition: .4s;
+}
+
+input:checked + .slider {
+    background-color: var(--primary);
+}
+
+input:checked + .slider:before {
+    transform: translateX(26px);
+}
+
+.slider.round {
+    border-radius: 34px;
+}
+
+.slider.round:before {
+    border-radius: 50%;
+}
+
+/* ================== DARK MODE STYLES ================== */
+body.dark-mode {
+    background: var(--dark-bg);
+    color: var(--dark-text);
+    background: linear-gradient(to top, #2c3e50, #34495e);
+}
+
+body.dark-mode .sidebar {
+    background: linear-gradient(180deg, #2c3e50, #23313f);
+    box-shadow: 4px 0 15px rgba(0,0,0,0.25);
+}
+
+body.dark-mode h1.dash-title, 
+body.dark-mode h2 {
+    color: var(--dark-text);
+    border-bottom-color: var(--primary);
+}
+
+body.dark-mode .dash-card,
+body.dark-mode .form-container,
+body.dark-mode .archived-card,
+body.dark-mode .auth-box,
+body.dark-mode table,
+body.dark-mode .modal-content,
+body.dark-mode .record-detail-card {
+    background: var(--dark-surface);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+body.dark-mode .dash-card { border-left-color: var(--primary); }
+body.dark-mode .dash-card h3 { color: var(--dark-text); }
+body.dark-mode .dash-card p { color: var(--dark-text-muted); }
+body.dark-mode .dash-card .icon-circle { background: #2c3e50; color: var(--primary); }
+
+body.dark-mode th, 
+body.dark-mode td,
+body.dark-mode fieldset {
+    border-color: var(--dark-border);
+}
+
+body.dark-mode tbody tr:hover { background-color: #4a627a; }
+
+body.dark-mode input, 
+body.dark-mode select, 
+body.dark-mode textarea {
+    background: #2c3e50;
+    border-color: var(--dark-border);
+    color: var(--dark-text);
+}
+
+body.dark-mode input:focus, 
+body.dark-mode select:focus, 
+body.dark-mode textarea:focus {
+    background: var(--dark-surface);
+    border-color: var(--primary);
+    box-shadow: 0 0 0 4px rgba(26, 188, 156, 0.2);
+}
+
+body.dark-mode .form-question { background: var(--dark-bg); 
+border-radius:6px;
+  cursor:pointer;
+  transition:0.3s;
+}
+
+.restore-btn:hover{
+  background:#16a085;
+}
+
+/* ================== DARK MODE TOGGLE ================== */
+.dark-mode-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 25px;
+    padding: 10px;
+    background: rgba(0,0,0,0.2);
+    border-radius: 50px;
+}
+
+.dark-mode-toggle i.fa-moon {
+    color: #f1c40f; /* Yellow moon */
+}
+
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 50px;
+    height: 24px;
+}
+
+.switch input { 
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #7f8c8d;
+    transition: .4s;
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 18px;
+    width: 18px;
+    left: 3px;
+    bottom: 3px;
+    background-color: white;
+    transition: .4s;
+}
+
+input:checked + .slider {
+    background-color: var(--primary);
+}
+
+input:checked + .slider:before {
+    transform: translateX(26px);
+}
+
+.slider.round {
+    border-radius: 34px;
+}
+
+.slider.round:before {
+    border-radius: 50%;
+}
+
+/* ================== DARK MODE STYLES ================== */
+body.dark-mode {
+    background: var(--dark-bg);
+    color: var(--dark-text);
+    background: linear-gradient(to top, #2c3e50, #34495e);
+}
+
+body.dark-mode .sidebar {
+    background: linear-gradient(180deg, #2c3e50, #23313f);
+    box-shadow: 4px 0 15px rgba(0,0,0,0.25);
+}
+
+body.dark-mode h1.dash-title, 
+body.dark-mode h2 {
+    color: var(--dark-text);
+    border-bottom-color: var(--primary);
+}
+
+body.dark-mode .dash-card,
+body.dark-mode .form-container,
+body.dark-mode .archived-card,
+body.dark-mode .auth-box,
+body.dark-mode table,
+body.dark-mode .modal-content,
+body.dark-mode .record-detail-card {
+    background: var(--dark-surface);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+body.dark-mode .dash-card { border-left-color: var(--primary); }
+body.dark-mode .dash-card h3 { color: var(--dark-text); }
+body.dark-mode .dash-card p { color: var(--dark-text-muted); }
+body.dark-mode .dash-card .icon-circle { background: #2c3e50; color: var(--primary); }
+
+body.dark-mode th, 
+body.dark-mode td,
+body.dark-mode fieldset {
+    border-color: var(--dark-border);
+}
+
+body.dark-mode tbody tr:hover { background-color: #4a627a; }
+
+body.dark-mode input, 
+body.dark-mode select, 
+body.dark-mode textarea {
+    background: #2c3e50;
+    border-color: var(--dark-border);
+    color: var(--dark-text);
+}
+
+body.dark-mode input:focus, 
+body.dark-mode select:focus, 
+body.dark-mode textarea:focus {
+    background: var(--dark-surface);
+    border-color: var(--primary);
+    box-shadow: 0 0 0 4px rgba(26, 188, 156, 0.2);
+}
+
+body.dark-mode .form-question { background: var(--dark-bg); 
+border-radius:6px;
+  cursor:pointer;
+  transition:0.3s;
+}
+
+.restore-btn:hover{
+  background:#16a085;
+}
+
+/* ================== DARK MODE TOGGLE ================== */
+.dark-mode-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 25px;
+    padding: 10px;
+    background: rgba(0,0,0,0.2);
+    border-radius: 50px;
+}
+
+.dark-mode-toggle i.fa-moon {
+    color: #f1c40f; /* Yellow moon */
+}
+
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 50px;
+    height: 24px;
+}
+
+.switch input { 
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #7f8c8d;
+    transition: .4s;
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 18px;
+    width: 18px;
+    left: 3px;
+    bottom: 3px;
+    background-color: white;
+    transition: .4s;
+}
+
+input:checked + .slider {
+    background-color: var(--primary);
+}
+
+input:checked + .slider:before {
+    transform: translateX(26px);
+}
+
+.slider.round {
+    border-radius: 34px;
+}
+
+.slider.round:before {
+    border-radius: 50%;
+}
+
+/* ================== DARK MODE STYLES ================== */
+body.dark-mode {
+    background: var(--dark-bg);
+    color: var(--dark-text);
+    background: linear-gradient(to top, #2c3e50, #34495e);
+}
+
+body.dark-mode .sidebar {
+    background: linear-gradient(180deg, #2c3e50, #23313f);
+    box-shadow: 4px 0 15px rgba(0,0,0,0.25);
+}
+
+body.dark-mode h1.dash-title, 
+body.dark-mode h2 {
+    color: var(--dark-text);
+    border-bottom-color: var(--primary);
+}
+
+body.dark-mode .dash-card,
+body.dark-mode .form-container,
+body.dark-mode .archived-card,
+body.dark-mode .auth-box,
+body.dark-mode table,
+body.dark-mode .modal-content,
+body.dark-mode .record-detail-card {
+    background: var(--dark-surface);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+body.dark-mode .dash-card { border-left-color: var(--primary); }
+body.dark-mode .dash-card h3 { color: var(--dark-text); }
+body.dark-mode .dash-card p { color: var(--dark-text-muted); }
+body.dark-mode .dash-card .icon-circle { background: #2c3e50; color: var(--primary); }
+
+body.dark-mode th, 
+body.dark-mode td,
+body.dark-mode fieldset {
+    border-color: var(--dark-border);
+}
+
+body.dark-mode tbody tr:hover { background-color: #4a627a; }
+
+body.dark-mode input, 
+body.dark-mode select, 
+body.dark-mode textarea {
+    background: #2c3e50;
+    border-color: var(--dark-border);
+    color: var(--dark-text);
+}
+
+body.dark-mode input:focus, 
+body.dark-mode select:focus, 
+body.dark-mode textarea:focus {
+    background: var(--dark-surface);
+    border-color: var(--primary);
+    box-shadow: 0 0 0 4px rgba(26, 188, 156, 0.2);
+}
+
+.restore-btn:hover{
+  background:#16a085;
+}
+
+/* ================== DARK MODE TOGGLE ================== */
+.dark-mode-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 25px;
+    padding: 10px;
+    background: rgba(0,0,0,0.2);
+    border-radius: 50px;
+}
+
+.dark-mode-toggle i.fa-moon {
+    color: #f1c40f; /* Yellow moon */
+}
+
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 50px;
+    height: 24px;
+}
+
+.switch input { 
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #7f8c8d;
+    transition: .4s;
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 18px;
+    width: 18px;
+    left: 3px;
+    bottom: 3px;
+    background-color: white;
+    transition: .4s;
+}
+
+input:checked + .slider {
+    background-color: var(--primary);
+}
+
+input:checked + .slider:before {
+    transform: translateX(26px);
+}
+
+.slider.round {
+    border-radius: 34px;
+}
+
+.slider.round:before {
+    border-radius: 50%;
+}
+
+/* ================== DARK MODE STYLES ================== */
+body.dark-mode {
+    background: var(--dark-bg);
+    color: var(--dark-text);
+    background: linear-gradient(to top, #2c3e50, #34495e);
+}
+
+body.dark-mode .sidebar {
+    background: linear-gradient(180deg, #2c3e50, #23313f);
+    box-shadow: 4px 0 15px rgba(0,0,0,0.25);
+}
+
+body.dark-mode h1.dash-title, 
+body.dark-mode h2 {
+    color: var(--dark-text);
+    border-bottom-color: var(--primary);
+}
+
+body.dark-mode .dash-card,
+body.dark-mode .form-container,
+body.dark-mode .archived-card,
+body.dark-mode .auth-box,
+body.dark-mode table,
+body.dark-mode .modal-content,
+body.dark-mode .record-detail-card {
+    background: var(--dark-surface);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+body.dark-mode .dash-card { border-left-color: var(--primary); }
+body.dark-mode .dash-card h3 { color: var(--dark-text); }
+body.dark-mode .dash-card p { color: var(--dark-text-muted); }
+body.dark-mode .dash-card .icon-circle { background: #2c3e50; color: var(--primary); }
+
+body.dark-mode th, 
+body.dark-mode td,
+body.dark-mode fieldset {
+    border-color: var(--dark-border);
+}
+
+body.dark-mode tbody tr:hover { background-color: #4a627a; }
+
+body.dark-mode input, 
+body.dark-mode select, 
+body.dark-mode textarea {
+    background: #2c3e50;
+    border-color: var(--dark-border);
+    color: var(--dark-text);
+}
+
+body.dark-mode input:focus, 
+body.dark-mode select:focus, 
+body.dark-mode textarea:focus {
+    background: var(--dark-surface);
+    border-color: var(--primary);
+    box-shadow: 0 0 0 4px rgba(26, 188, 156, 0.2);
+}
+
+
+.restore-btn:hover{
+  background:#16a085;
+}
+
+/* ================== DARK MODE TOGGLE ================== */
+.dark-mode-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 25px;
+    padding: 10px;
+    background: rgba(0,0,0,0.2);
+    border-radius: 50px;
+}
+
+.dark-mode-toggle i.fa-moon {
+    color: #f1c40f; /* Yellow moon */
+}
+
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 50px;
+    height: 24px;
+}
+
+.switch input { 
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #7f8c8d;
+    transition: .4s;
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 18px;
+    width: 18px;
+    left: 3px;
+    bottom: 3px;
+    background-color: white;
+    transition: .4s;
+}
+
+input:checked + .slider {
+    background-color: var(--primary);
+}
+
+input:checked + .slider:before {
+    transform: translateX(26px);
+}
+
+.slider.round {
+    border-radius: 34px;
+}
+
+.slider.round:before {
+    border-radius: 50%;
+}
+
+/* ================== DARK MODE STYLES ================== */
+body.dark-mode {
+    background: var(--dark-bg);
+    color: var(--dark-text);
+    background: linear-gradient(to top, #2c3e50, #34495e);
+}
+
+body.dark-mode .sidebar {
+    background: linear-gradient(180deg, #2c3e50, #23313f);
+    box-shadow: 4px 0 15px rgba(0,0,0,0.25);
+}
+
+body.dark-mode h1.dash-title, 
+body.dark-mode h2 {
+    color: var(--dark-text);
+    border-bottom-color: var(--primary);
+}
+
+body.dark-mode .dash-card,
+body.dark-mode .form-container,
+body.dark-mode .archived-card,
+body.dark-mode .auth-box,
+body.dark-mode table,
+body.dark-mode .modal-content,
+body.dark-mode .record-detail-card {
+    background: var(--dark-surface);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+body.dark-mode .dash-card { border-left-color: var(--primary); }
+body.dark-mode .dash-card h3 { color: var(--dark-text); }
+body.dark-mode .dash-card p { color: var(--dark-text-muted); }
+body.dark-mode .dash-card .icon-circle { background: #2c3e50; color: var(--primary); }
+
+body.dark-mode th, 
+body.dark-mode td,
+body.dark-mode fieldset {
+    border-color: var(--dark-border);
+}
+
+body.dark-mode tbody tr:hover { background-color: #4a627a; }
+
+body.dark-mode input, 
+body.dark-mode select, 
+body.dark-mode textarea {
+    background: #2c3e50;
+    border-color: var(--dark-border);
+    color: var(--dark-text);
+}
+
+body.dark-mode input:focus, 
+body.dark-mode select:focus, 
+body.dark-mode textarea:focus {
+    background: var(--dark-surface);
+    border-color: var(--primary);
+    box-shadow: 0 0 0 4px rgba(26, 188, 156, 0.2);
+}
+
+.restore-btn:hover{
+  background:#16a085;
+}
+
+/* ================== DARK MODE TOGGLE ================== */
+.dark-mode-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 25px;
+    padding: 10px;
+    background: rgba(0,0,0,0.2);
+    border-radius: 50px;
+}
+
+.dark-mode-toggle i.fa-moon {
+    color: #f1c40f; /* Yellow moon */
+}
+
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 50px;
+    height: 24px;
+}
+
+.switch input { 
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #7f8c8d;
+    transition: .4s;
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 18px;
+    width: 18px;
+    left: 3px;
+    bottom: 3px;
+    background-color: white;
+    transition: .4s;
+}
+
+input:checked + .slider {
+    background-color: var(--primary);
+}
+
+input:checked + .slider:before {
+    transform: translateX(26px);
+}
+
+.slider.round {
+    border-radius: 34px;
+}
+
+.slider.round:before {
+    border-radius: 50%;
+}
+
+/* ================== DARK MODE STYLES ================== */
+body.dark-mode {
+    background: var(--dark-bg);
+    color: var(--dark-text);
+    background: linear-gradient(to top, #2c3e50, #34495e);
+}
+
+body.dark-mode .sidebar {
+    background: linear-gradient(180deg, #2c3e50, #23313f);
+    box-shadow: 4px 0 15px rgba(0,0,0,0.25);
+}
+
+body.dark-mode h1.dash-title, 
+body.dark-mode h2 {
+    color: var(--dark-text);
+    border-bottom-color: var(--primary);
+}
+
+body.dark-mode .dash-card,
+body.dark-mode .form-container,
+body.dark-mode .archived-card,
+body.dark-mode .auth-box,
+body.dark-mode table,
+body.dark-mode .modal-content,
+body.dark-mode .record-detail-card {
+    background: var(--dark-surface);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+body.dark-mode .dash-card { border-left-color: var(--primary); }
+body.dark-mode .dash-card h3 { color: var(--dark-text); }
+body.dark-mode .dash-card p { color: var(--dark-text-muted); }
+body.dark-mode .dash-card .icon-circle { background: #2c3e50; color: var(--primary); }
+
+body.dark-mode th, 
+body.dark-mode td,
+body.dark-mode fieldset {
+    border-color: var(--dark-border);
+}
+
+body.dark-mode tbody tr:hover { background-color: #4a627a; }
+
+body.dark-mode input, 
+body.dark-mode select, 
+body.dark-mode textarea {
+    background: #2c3e50;
+    border-color: var(--dark-border);
+    color: var(--dark-text);
+}
+
+body.dark-mode input:focus, 
+body.dark-mode select:focus, 
+body.dark-mode textarea:focus {
+    background: var(--dark-surface);
+    border-color: var(--primary);
+    box-shadow: 0 0 0 4px rgba(26, 188, 156, 0.2);
+}
+
+
+
+.restore-btn:hover{
+  background:#16a085;
+}
+
+/* ================== DARK MODE TOGGLE ================== */
+.dark-mode-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 25px;
+    padding: 10px;
+    background: rgba(0,0,0,0.2);
+    border-radius: 50px;
+}
+
+.dark-mode-toggle i.fa-moon {
+    color: #f1c40f; /* Yellow moon */
+}
+
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 50px;
+    height: 24px;
+}
+
+.switch input { 
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #7f8c8d;
+    transition: .4s;
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 18px;
+    width: 18px;
+    left: 3px;
+    bottom: 3px;
+    background-color: white;
+    transition: .4s;
+}
+
+input:checked + .slider {
+    background-color: var(--primary);
+}
+
+input:checked + .slider:before {
+    transform: translateX(26px);
+}
+
+.slider.round {
+    border-radius: 34px;
+}
+
+.slider.round:before {
+    border-radius: 50%;
+}
+
+/* ================== DARK MODE STYLES ================== */
+body.dark-mode {
+    background: var(--dark-bg);
+    color: var(--dark-text);
+    background: linear-gradient(to top, #2c3e50, #34495e);
+}
+
+body.dark-mode .sidebar {
+    background: linear-gradient(180deg, #2c3e50, #23313f);
+    box-shadow: 4px 0 15px rgba(0,0,0,0.25);
+}
+
+body.dark-mode h1.dash-title, 
+body.dark-mode h2 {
+    color: var(--dark-text);
+    border-bottom-color: var(--primary);
+}
+
+body.dark-mode .dash-card,
+body.dark-mode .form-container,
+body.dark-mode .archived-card,
+body.dark-mode .auth-box,
+body.dark-mode table,
+body.dark-mode .modal-content,
+body.dark-mode .record-detail-card {
+    background: var(--dark-surface);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+body.dark-mode .dash-card { border-left-color: var(--primary); }
+body.dark-mode .dash-card h3 { color: var(--dark-text); }
+body.dark-mode .dash-card p { color: var(--dark-text-muted); }
+body.dark-mode .dash-card .icon-circle { background: #2c3e50; color: var(--primary); }
+
+body.dark-mode th, 
+body.dark-mode td,
+body.dark-mode fieldset {
+    border-color: var(--dark-border);
+}
+
+body.dark-mode tbody tr:hover { background-color: #4a627a; }
+
+body.dark-mode input, 
+body.dark-mode select, 
+body.dark-mode textarea {
+    background: #2c3e50;
+    border-color: var(--dark-border);
+    color: var(--dark-text);
+}
+
+body.dark-mode input:focus, 
+body.dark-mode select:focus, 
+body.dark-mode textarea:focus {
+    background: var(--dark-surface);
+    border-color: var(--primary);
+    box-shadow: 0 0 0 4px rgba(26, 188, 156, 0.2);
+}
+
+
+.restore-btn:hover{
+  background:#16a085;
+}
+
+/* ================== DARK MODE TOGGLE ================== */
+.dark-mode-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 25px;
+    padding: 10px;
+    background: rgba(0,0,0,0.2);
+    border-radius: 50px;
+}
+
+.dark-mode-toggle i.fa-moon {
+    color: #f1c40f; /* Yellow moon */
+}
+
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 50px;
+    height: 24px;
+}
+
+.switch input { 
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #7f8c8d;
+    transition: .4s;
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 18px;
+    width: 18px;
+    left: 3px;
+    bottom: 3px;
+    background-color: white;
+    transition: .4s;
+}
+
+input:checked + .slider {
+    background-color: var(--primary);
+}
+
+input:checked + .slider:before {
+    transform: translateX(26px);
+}
+
+.slider.round {
+    border-radius: 34px;
+}
+
+.slider.round:before {
+    border-radius: 50%;
+}
+
+/* ================== DARK MODE STYLES ================== */
+body.dark-mode {
+    background: var(--dark-bg);
+    color: var(--dark-text);
+    background: linear-gradient(to top, #2c3e50, #34495e);
+}
+
+body.dark-mode .sidebar {
+    background: linear-gradient(180deg, #2c3e50, #23313f);
+    box-shadow: 4px 0 15px rgba(0,0,0,0.25);
+}
+
+body.dark-mode h1.dash-title, 
+body.dark-mode h2 {
+    color: var(--dark-text);
+    border-bottom-color: var(--primary);
+}
+
+body.dark-mode .dash-card,
+body.dark-mode .form-container,
+body.dark-mode .archived-card,
+body.dark-mode .auth-box,
+body.dark-mode table,
+body.dark-mode .modal-content,
+body.dark-mode .record-detail-card {
+    background: var(--dark-surface);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+body.dark-mode .dash-card { border-left-color: var(--primary); }
+body.dark-mode .dash-card h3 { color: var(--dark-text); }
+body.dark-mode .dash-card p { color: var(--dark-text-muted); }
+body.dark-mode .dash-card .icon-circle { background: #2c3e50; color: var(--primary); }
+
+body.dark-mode th, 
+body.dark-mode td,
+body.dark-mode fieldset {
+    border-color: var(--dark-border);
+}
+
+body.dark-mode tbody tr:hover { background-color: #4a627a; }
+
+body.dark-mode input, 
+body.dark-mode select, 
+body.dark-mode textarea {
+    background: #2c3e50;
+    border-color: var(--dark-border);
+    color: var(--dark-text);
+}
+
+body.dark-mode input:focus, 
+body.dark-mode select:focus, 
+body.dark-mode textarea:focus {
+    background: var(--dark-surface);
+    border-color: var(--primary);
+    box-shadow: 0 0 0 4px rgba(26, 188, 156, 0.2);
+}
+
+
+
+.restore-btn:hover{
+  background:#16a085;
+}
+
+/* ================== DARK MODE TOGGLE ================== */
+.dark-mode-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 25px;
+    padding: 10px;
+    background: rgba(0,0,0,0.2);
+    border-radius: 50px;
+}
+
+.dark-mode-toggle i.fa-moon {
+    color: #f1c40f; /* Yellow moon */
+}
+
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 50px;
+    height: 24px;
+}
+
+.switch input { 
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #7f8c8d;
+    transition: .4s;
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 18px;
+    width: 18px;
+    left: 3px;
+    bottom: 3px;
+    background-color: white;
+    transition: .4s;
+}
+
+input:checked + .slider {
+    background-color: var(--primary);
+}
+
+input:checked + .slider:before {
+    transform: translateX(26px);
+}
+
+.slider.round {
+    border-radius: 34px;
+}
+
+.slider.round:before {
+    border-radius: 50%;
+}
+
+/* ================== DARK MODE STYLES ================== */
+body.dark-mode {
+    background: var(--dark-bg);
+    color: var(--dark-text);
+    background: linear-gradient(to top, #2c3e50, #34495e);
+}
+
+body.dark-mode .sidebar {
+    background: linear-gradient(180deg, #2c3e50, #23313f);
+    box-shadow: 4px 0 15px rgba(0,0,0,0.25);
+}
+
+body.dark-mode h1.dash-title, 
+body.dark-mode h2 {
+    color: var(--dark-text);
+    border-bottom-color: var(--primary);
+}
+
+body.dark-mode .dash-card,
+body.dark-mode .form-container,
+body.dark-mode .archived-card,
+body.dark-mode .auth-box,
+body.dark-mode table,
+body.dark-mode .modal-content,
+body.dark-mode .record-detail-card {
+    background: var(--dark-surface);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+body.dark-mode .dash-card { border-left-color: var(--primary); }
+body.dark-mode .dash-card h3 { color: var(--dark-text); }
+body.dark-mode .dash-card p { color: var(--dark-text-muted); }
+body.dark-mode .dash-card .icon-circle { background: #2c3e50; color: var(--primary); }
+
+body.dark-mode th, 
+body.dark-mode td,
+body.dark-mode fieldset {
+    border-color: var(--dark-border);
+}
+
+body.dark-mode tbody tr:hover { background-color: #4a627a; }
+
+body.dark-mode input, 
+body.dark-mode select, 
+body.dark-mode textarea {
+    background: #2c3e50;
+    border-color: var(--dark-border);
+    color: var(--dark-text);
+}
+
+body.dark-mode input:focus, 
+body.dark-mode select:focus, 
+body.dark-mode textarea:focus {
+    background: var(--dark-surface);
+    border-color: var(--primary);
+    box-shadow: 0 0 0 4px rgba(26, 188, 156, 0.2);
+}
+
+
+
+.restore-btn:hover{
+  background:#16a085;
+}
+
+/* ================== DARK MODE TOGGLE ================== */
+.dark-mode-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 25px;
+    padding: 10px;
+    background: rgba(0,0,0,0.2);
+    border-radius: 50px;
+}
+
+.dark-mode-toggle i.fa-moon {
+    color: #f1c40f; /* Yellow moon */
+}
+
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 50px;
+    height: 24px;
+}
+
+.switch input { 
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #7f8c8d;
+    transition: .4s;
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 18px;
+    width: 18px;
+    left: 3px;
+    bottom: 3px;
+    background-color: white;
+    transition: .4s;
+}
+
+input:checked + .slider {
+    background-color: var(--primary);
+}
+
+input:checked + .slider:before {
+    transform: translateX(26px);
+}
+
+.slider.round {
+    border-radius: 34px;
+}
+
+.slider.round:before {
+    border-radius: 50%;
+}
+
+/* ================== DARK MODE STYLES ================== */
+body.dark-mode {
+    background: var(--dark-bg);
+    color: var(--dark-text);
+    background: linear-gradient(to top, #2c3e50, #34495e);
+}
+
+body.dark-mode .sidebar {
+    background: linear-gradient(180deg, #2c3e50, #23313f);
+    box-shadow: 4px 0 15px rgba(0,0,0,0.25);
+}
+
+body.dark-mode h1.dash-title, 
+body.dark-mode h2 {
+    color: var(--dark-text);
+    border-bottom-color: var(--primary);
+}
+
+body.dark-mode .dash-card,
+body.dark-mode .form-container,
+body.dark-mode .archived-card,
+body.dark-mode .auth-box,
+body.dark-mode table,
+body.dark-mode .modal-content,
+body.dark-mode .record-detail-card {
+    background: var(--dark-surface);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+body.dark-mode .dash-card { border-left-color: var(--primary); }
+body.dark-mode .dash-card h3 { color: var(--dark-text); }
+body.dark-mode .dash-card p { color: var(--dark-text-muted); }
+body.dark-mode .dash-card .icon-circle { background: #2c3e50; color: var(--primary); }
+
+body.dark-mode th, 
+body.dark-mode td,
+body.dark-mode fieldset {
+    border-color: var(--dark-border);
+}
+
+body.dark-mode tbody tr:hover { background-color: #4a627a; }
+
+body.dark-mode input, 
+body.dark-mode select, 
+body.dark-mode textarea {
+    background: #2c3e50;
+    border-color: var(--dark-border);
+    color: var(--dark-text);
+}
+
+body.dark-mode input:focus, 
+body.dark-mode select:focus, 
+body.dark-mode textarea:focus {
+    background: var(--dark-surface);
+    border-color: var(--primary);
+    box-shadow: 0 0 0 4px rgba(26, 188, 156, 0.2);
+}
+
+
+.restore-btn:hover{
+  background:#16a085;
+}
+
+/* ================== DARK MODE TOGGLE ================== */
+.dark-mode-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 25px;
+    padding: 10px;
+    background: rgba(0,0,0,0.2);
+    border-radius: 50px;
+}
+
+.dark-mode-toggle i.fa-moon {
+    color: #f1c40f; /* Yellow moon */
+}
+
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 50px;
+    height: 24px;
+}
+
+.switch input { 
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #7f8c8d;
+    transition: .4s;
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 18px;
+    width: 18px;
+    left: 3px;
+    bottom: 3px;
+    background-color: white;
+    transition: .4s;
+}
+
+input:checked + .slider {
+    background-color: var(--primary);
+}
+
+input:checked + .slider:before {
+    transform: translateX(26px);
+}
+
+.slider.round {
+    border-radius: 34px;
+}
+
+.slider.round:before {
+    border-radius: 50%;
+}
+
+/* ================== DARK MODE STYLES ================== */
+body.dark-mode {
+    background: var(--dark-bg);
+    color: var(--dark-text);
+    background: linear-gradient(to top, #2c3e50, #34495e);
+}
+
+body.dark-mode .sidebar {
+    background: linear-gradient(180deg, #2c3e50, #23313f);
+    box-shadow: 4px 0 15px rgba(0,0,0,0.25);
+}
+
+body.dark-mode h1.dash-title, 
+body.dark-mode h2 {
+    color: var(--dark-text);
+    border-bottom-color: var(--primary);
+}
+
+body.dark-mode .dash-card,
+body.dark-mode .form-container,
+body.dark-mode .archived-card,
+body.dark-mode .auth-box,
+body.dark-mode table,
+body.dark-mode .modal-content,
+body.dark-mode .record-detail-card {
+    background: var(--dark-surface);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+body.dark-mode .dash-card { border-left-color: var(--primary); }
+body.dark-mode .dash-card h3 { color: var(--dark-text); }
+body.dark-mode .dash-card p { color: var(--dark-text-muted); }
+body.dark-mode .dash-card .icon-circle { background: #2c3e50; color: var(--primary); }
+
+body.dark-mode th, 
+body.dark-mode td,
+body.dark-mode fieldset {
+    border-color: var(--dark-border);
+}
+
+body.dark-mode tbody tr:hover { background-color: #4a627a; }
+
+body.dark-mode input, 
+body.dark-mode select, 
+body.dark-mode textarea {
+    background: #2c3e50;
+    border-color: var(--dark-border);
+    color: var(--dark-text);
+}
+
+body.dark-mode input:focus, 
+body.dark-mode select:focus, 
+body.dark-mode textarea:focus {
+    background: var(--dark-surface);
+    border-color: var(--primary);
+    box-shadow: 0 0 0 4px rgba(26, 188, 156, 0.2);
+}
+
+.restore-btn:hover{
+  background:#16a085;
+}
+
+/* ================== DARK MODE TOGGLE ================== */
+.dark-mode-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 25px;
+    padding: 10px;
+    background: rgba(0,0,0,0.2);
+    border-radius: 50px;
+}
+
+.dark-mode-toggle i.fa-moon {
+    color: #f1c40f; /* Yellow moon */
+}
+
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 50px;
+    height: 24px;
+}
+
+.switch input { 
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #7f8c8d;
+    transition: .4s;
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 18px;
+    width: 18px;
+    left: 3px;
+    bottom: 3px;
+    background-color: white;
+    transition: .4s;
+}
+
+input:checked + .slider {
+    background-color: var(--primary);
+}
+
+input:checked + .slider:before {
+    transform: translateX(26px);
+}
+
+.slider.round {
+    border-radius: 34px;
+}
+
+.slider.round:before {
+    border-radius: 50%;
+}
+
+/* ================== DARK MODE STYLES ================== */
+body.dark-mode {
+    background: var(--dark-bg);
+    color: var(--dark-text);
+    background: linear-gradient(to top, #2c3e50, #34495e);
+}
+
+body.dark-mode .sidebar {
+    background: linear-gradient(180deg, #2c3e50, #23313f);
+    box-shadow: 4px 0 15px rgba(0,0,0,0.25);
+}
+
+body.dark-mode h1.dash-title, 
+body.dark-mode h2 {
+    color: var(--dark-text);
+    border-bottom-color: var(--primary);
+}
+
+body.dark-mode .dash-card,
+body.dark-mode .form-container,
+body.dark-mode .archived-card,
+body.dark-mode .auth-box,
+body.dark-mode table,
+body.dark-mode .modal-content,
+body.dark-mode .record-detail-card {
+    background: var(--dark-surface);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+body.dark-mode .dash-card { border-left-color: var(--primary); }
+body.dark-mode .dash-card h3 { color: var(--dark-text); }
+body.dark-mode .dash-card p { color: var(--dark-text-muted); }
+body.dark-mode .dash-card .icon-circle { background: #2c3e50; color: var(--primary); }
+
+body.dark-mode th, 
+body.dark-mode td,
+body.dark-mode fieldset {
+    border-color: var(--dark-border);
+}
+
+body.dark-mode tbody tr:hover { background-color: #4a627a; }
+
+body.dark-mode input, 
+body.dark-mode select, 
+body.dark-mode textarea {
+    background: #2c3e50;
+    border-color: var(--dark-border);
+    color: var(--dark-text);
+}
+
+body.dark-mode input:focus, 
+body.dark-mode select:focus, 
+body.dark-mode textarea:focus {
+    background: var(--dark-surface);
+    border-color: var(--primary);
+    box-shadow: 0 0 0 4px rgba(26, 188, 156, 0.2);
+}
+
+
+
+.restore-btn:hover{
+  background:#16a085;
+}
+
+/* ================== DARK MODE TOGGLE ================== */
+.dark-mode-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 25px;
+    padding: 10px;
+    background: rgba(0,0,0,0.2);
+    border-radius: 50px;
+}
+
+.dark-mode-toggle i.fa-moon {
+    color: #f1c40f; /* Yellow moon */
+}
+
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 50px;
+    height: 24px;
+}
+
+.switch input { 
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #7f8c8d;
+    transition: .4s;
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 18px;
+    width: 18px;
+    left: 3px;
+    bottom: 3px;
+    background-color: white;
+    transition: .4s;
+}
+
+input:checked + .slider {
+    background-color: var(--primary);
+}
+
+input:checked + .slider:before {
+    transform: translateX(26px);
+}
+
+.slider.round {
+    border-radius: 34px;
+}
+
+.slider.round:before {
+    border-radius: 50%;
+}
+
+/* ================== DARK MODE STYLES ================== */
+body.dark-mode {
+    background: var(--dark-bg);
+    color: var(--dark-text);
+    background: linear-gradient(to top, #2c3e50, #34495e);
+}
+
+body.dark-mode .sidebar {
+    background: linear-gradient(180deg, #2c3e50, #23313f);
+    box-shadow: 4px 0 15px rgba(0,0,0,0.25);
+}
+
+body.dark-mode h1.dash-title, 
+body.dark-mode h2 {
+    color: var(--dark-text);
+    border-bottom-color: var(--primary);
+}
+
+body.dark-mode .dash-card,
+body.dark-mode .form-container,
+body.dark-mode .archived-card,
+body.dark-mode .auth-box,
+body.dark-mode table,
+body.dark-mode .modal-content,
+body.dark-mode .record-detail-card {
+    background: var(--dark-surface);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+body.dark-mode .dash-card { border-left-color: var(--primary); }
+body.dark-mode .dash-card h3 { color: var(--dark-text); }
+body.dark-mode .dash-card p { color: var(--dark-text-muted); }
+body.dark-mode .dash-card .icon-circle { background: #2c3e50; color: var(--primary); }
+
+body.dark-mode th, 
+body.dark-mode td,
+body.dark-mode fieldset {
+    border-color: var(--dark-border);
+}
+
+body.dark-mode tbody tr:hover { background-color: #4a627a; }
+
+body.dark-mode input, 
+body.dark-mode select, 
+body.dark-mode textarea {
+    background: #2c3e50;
+    border-color: var(--dark-border);
+    color: var(--dark-text);
+}
+
+body.dark-mode input:focus, 
+body.dark-mode select:focus, 
+body.dark-mode textarea:focus {
+    background: var(--dark-surface);
+    border-color: var(--primary);
+    box-shadow: 0 0 0 4px rgba(26, 188, 156, 0.2);
+}
+
+
+
+.restore-btn:hover{
+  background:#16a085;
+}
+
+/* ================== DARK MODE TOGGLE ================== */
+.dark-mode-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 25px;
+    padding: 10px;
+    background: rgba(0,0,0,0.2);
+    border-radius: 50px;
+}
+
+.dark-mode-toggle i.fa-moon {
+    color: #f1c40f; /* Yellow moon */
+}
+
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 50px;
+    height: 24px;
+}
+
+.switch input { 
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #7f8c8d;
+    transition: .4s;
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 18px;
+    width: 18px;
+    left: 3px;
+    bottom: 3px;
+    background-color: white;
+    transition: .4s;
+}
+
+input:checked + .slider {
+    background-color: var(--primary);
+}
+
+input:checked + .slider:before {
+    transform: translateX(26px);
+}
+
+.slider.round {
+    border-radius: 34px;
+}
+
+.slider.round:before {
+    border-radius: 50%;
+}
+
+/* ================== DARK MODE STYLES ================== */
+body.dark-mode {
+    background: var(--dark-bg);
+    color: var(--dark-text);
+    background: linear-gradient(to top, #2c3e50, #34495e);
+}
+
+body.dark-mode .sidebar {
+    background: linear-gradient(180deg, #2c3e50, #23313f);
+    box-shadow: 4px 0 15px rgba(0,0,0,0.25);
+}
+
+body.dark-mode h1.dash-title, 
+body.dark-mode h2 {
+    color: var(--dark-text);
+    border-bottom-color: var(--primary);
+}
+
+body.dark-mode .dash-card,
+body.dark-mode .form-container,
+body.dark-mode .archived-card,
+body.dark-mode .auth-box,
+body.dark-mode table,
+body.dark-mode .modal-content,
+body.dark-mode .record-detail-card {
+    background: var(--dark-surface);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+body.dark-mode .dash-card { border-left-color: var(--primary); }
+body.dark-mode .dash-card h3 { color: var(--dark-text); }
+body.dark-mode .dash-card p { color: var(--dark-text-muted); }
+body.dark-mode .dash-card .icon-circle { background: #2c3e50; color: var(--primary); }
+
+body.dark-mode th, 
+body.dark-mode td,
+body.dark-mode fieldset {
+    border-color: var(--dark-border);
+}
+
+body.dark-mode tbody tr:hover { background-color: #4a627a; }
+
+body.dark-mode input, 
+body.dark-mode select, 
+body.dark-mode textarea {
+    background: #2c3e50;
+    border-color: var(--dark-border);
+    color: var(--dark-text);
+}
+
+body.dark-mode input:focus, 
+body.dark-mode select:focus, 
+body.dark-mode textarea:focus {
+    background: var(--dark-surface);
+    border-color: var(--primary);
+    box-shadow: 0 0 0 4px rgba(26, 188, 156, 0.2);
+}
+
+
+
+.restore-btn:hover{
+  background:#16a085;
+}
+
+/* ================== DARK MODE TOGGLE ================== */
+.dark-mode-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 25px;
+    padding: 10px;
+    background: rgba(0,0,0,0.2);
+    border-radius: 50px;
+}
+
+.dark-mode-toggle i.fa-moon {
+    color: #f1c40f; /* Yellow moon */
+}
+
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 50px;
+    height: 24px;
+}
+
+.switch input { 
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #7f8c8d;
+    transition: .4s;
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 18px;
+    width: 18px;
+    left: 3px;
+    bottom: 3px;
+    background-color: white;
+    transition: .4s;
+}
+
+input:checked + .slider {
+    background-color: var(--primary);
+}
+
+input:checked + .slider:before {
+    transform: translateX(26px);
+}
+
+.slider.round {
+    border-radius: 34px;
+}
+
+.slider.round:before {
+    border-radius: 50%;
+}
+
+/* ================== DARK MODE STYLES ================== */
+body.dark-mode {
+    background: var(--dark-bg);
+    color: var(--dark-text);
+    background: linear-gradient(to top, #2c3e50, #34495e);
+}
+
+body.dark-mode .sidebar {
+    background: linear-gradient(180deg, #2c3e50, #23313f);
+    box-shadow: 4px 0 15px rgba(0,0,0,0.25);
+}
+
+body.dark-mode h1.dash-title, 
+body.dark-mode h2 {
+    color: var(--dark-text);
+    border-bottom-color: var(--primary);
+}
+
+body.dark-mode .dash-card,
+body.dark-mode .form-container,
+body.dark-mode .archived-card,
+body.dark-mode .auth-box,
+body.dark-mode table,
+body.dark-mode .modal-content,
+body.dark-mode .record-detail-card {
+    background: var(--dark-surface);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+body.dark-mode .dash-card { border-left-color: var(--primary); }
+body.dark-mode .dash-card h3 { color: var(--dark-text); }
+body.dark-mode .dash-card p { color: var(--dark-text-muted); }
+body.dark-mode .dash-card .icon-circle { background: #2c3e50; color: var(--primary); }
+
+body.dark-mode th, 
+body.dark-mode td,
+body.dark-mode fieldset {
+    border-color: var(--dark-border);
+}
+
+body.dark-mode tbody tr:hover { background-color: #4a627a; }
+
+body.dark-mode input, 
+body.dark-mode select, 
+body.dark-mode textarea {
+    background: #2c3e50;
+    border-color: var(--dark-border);
+    color: var(--dark-text);
+}
+
+body.dark-mode input:focus, 
+body.dark-mode select:focus, 
+body.dark-mode textarea:focus {
+    background: var(--dark-surface);
+    border-color: var(--primary);
+    box-shadow: 0 0 0 4px rgba(26, 188, 156, 0.2);
+}
+
+
+.restore-btn:hover{
+  background:#16a085;
+}
+
+/* ================== DARK MODE TOGGLE ================== */
+.dark-mode-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 25px;
+    padding: 10px;
+    background: rgba(0,0,0,0.2);
+    border-radius: 50px;
+}
+
+.dark-mode-toggle i.fa-moon {
+    color: #f1c40f; /* Yellow moon */
+}
+
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 50px;
+    height: 24px;
+}
+
+.switch input { 
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #7f8c8d;
+    transition: .4s;
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 18px;
+    width: 18px;
+    left: 3px;
+    bottom: 3px;
+    background-color: white;
+    transition: .4s;
+}
+
+input:checked + .slider {
+    background-color: var(--primary);
+}
+
+input:checked + .slider:before {
+    transform: translateX(26px);
+}
+
+.slider.round {
+    border-radius: 34px;
+}
+
+.slider.round:before {
+    border-radius: 50%;
+}
+
+/* ================== DARK MODE STYLES ================== */
+body.dark-mode {
+    background: var(--dark-bg);
+    color: var(--dark-text);
+    background: linear-gradient(to top, #2c3e50, #34495e);
+}
+
+body.dark-mode .sidebar {
+    background: linear-gradient(180deg, #2c3e50, #23313f);
+    box-shadow: 4px 0 15px rgba(0,0,0,0.25);
+}
+
+body.dark-mode h1.dash-title, 
+body.dark-mode h2 {
+    color: var(--dark-text);
+    border-bottom-color: var(--primary);
+}
+
+body.dark-mode .dash-card,
+body.dark-mode .form-container,
+body.dark-mode .archived-card,
+body.dark-mode .auth-box,
+body.dark-mode table,
+body.dark-mode .modal-content,
+body.dark-mode .record-detail-card {
+    background: var(--dark-surface);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+body.dark-mode .dash-card { border-left-color: var(--primary); }
+body.dark-mode .dash-card h3 { color: var(--dark-text); }
+body.dark-mode .dash-card p { color: var(--dark-text-muted); }
+body.dark-mode .dash-card .icon-circle { background: #2c3e50; color: var(--primary); }
+
+body.dark-mode th, 
+body.dark-mode td,
+body.dark-mode fieldset {
+    border-color: var(--dark-border);
+}
+
+body.dark-mode tbody tr:hover { background-color: #4a627a; }
+
+body.dark-mode input, 
+body.dark-mode select, 
+body.dark-mode textarea {
+    background: #2c3e50;
+    border-color: var(--dark-border);
+    color: var(--dark-text);
+}
+
+body.dark-mode input:focus, 
+body.dark-mode select:focus, 
+body.dark-mode textarea:focus {
+    background: var(--dark-surface);
+    border-color: var(--primary);
+    box-shadow: 0 0 0 4px rgba(26, 188, 156, 0.2);
+}
+
+
+
+.restore-btn:hover{
+  background:#16a085;
+}
+
+/* ================== DARK MODE TOGGLE ================== */
+.dark-mode-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 25px;
+    padding: 10px;
+    background: rgba(0,0,0,0.2);
+    border-radius: 50px;
+}
+
+.dark-mode-toggle i.fa-moon {
+    color: #f1c40f; /* Yellow moon */
+}
+
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 50px;
+    height: 24px;
+}
+
+.switch input { 
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #7f8c8d;
+    transition: .4s;
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 18px;
+    width: 18px;
+    left: 3px;
+    bottom: 3px;
+    background-color: white;
+    transition: .4s;
+}
+
+input:checked + .slider {
+    background-color: var(--primary);
+}
+
+input:checked + .slider:before {
+    transform: translateX(26px);
+}
+
+.slider.round {
+    border-radius: 34px;
+}
+
+.slider.round:before {
+    border-radius: 50%;
+}
+
+/* ================== DARK MODE STYLES ================== */
+body.dark-mode {
+    background: var(--dark-bg);
+    color: var(--dark-text);
+    background: linear-gradient(to top, #2c3e50, #34495e);
+}
+
+body.dark-mode .sidebar {
+    background: linear-gradient(180deg, #2c3e50, #23313f);
+    box-shadow: 4px 0 15px rgba(0,0,0,0.25);
+}
+
+body.dark-mode h1.dash-title, 
+body.dark-mode h2 {
+    color: var(--dark-text);
+    border-bottom-color: var(--primary);
+}
+
+body.dark-mode .dash-card,
+body.dark-mode .form-container,
+body.dark-mode .archived-card,
+body.dark-mode .auth-box,
+body.dark-mode table,
+body.dark-mode .modal-content,
+body.dark-mode .record-detail-card {
+    background: var(--dark-surface);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+body.dark-mode .dash-card { border-left-color: var(--primary); }
+body.dark-mode .dash-card h3 { color: var(--dark-text); }
+body.dark-mode .dash-card p { color: var(--dark-text-muted); }
+body.dark-mode .dash-card .icon-circle { background: #2c3e50; color: var(--primary); }
+
+body.dark-mode th, 
+body.dark-mode td,
+body.dark-mode fieldset {
+    border-color: var(--dark-border);
+}
+
+body.dark-mode tbody tr:hover { background-color: #4a627a; }
+
+body.dark-mode input, 
+body.dark-mode select, 
+body.dark-mode textarea {
+    background: #2c3e50;
+    border-color: var(--dark-border);
+    color: var(--dark-text);
+}
+
+body.dark-mode input:focus, 
+body.dark-mode select:focus, 
+body.dark-mode textarea:focus {
+    background: var(--dark-surface);
+    border-color: var(--primary);
+    box-shadow: 0 0 0 4px rgba(26, 188, 156, 0.2);
+}
+
+
+
+.restore-btn:hover{
+  background:#16a085;
+}
+
+/* ================== DARK MODE TOGGLE ================== */
+.dark-mode-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 25px;
+    padding: 10px;
+    background: rgba(0,0,0,0.2);
+    border-radius: 50px;
+}
+
+.dark-mode-toggle i.fa-moon {
+    color: #f1c40f; /* Yellow moon */
+}
+
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 50px;
+    height: 24px;
+}
+
+.switch input { 
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #7f8c8d;
+    transition: .4s;
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 18px;
+    width: 18px;
+    left: 3px;
+    bottom: 3px;
+    background-color: white;
+    transition: .4s;
+}
+
+input:checked + .slider {
+    background-color: var(--primary);
+}
+
+input:checked + .slider:before {
+    transform: translateX(26px);
+}
+
+.slider.round {
+    border-radius: 34px;
+}
+
+.slider.round:before {
+    border-radius: 50%;
+}
+
+/* ================== DARK MODE STYLES ================== */
+body.dark-mode {
+    background: var(--dark-bg);
+    color: var(--dark-text);
+    background: linear-gradient(to top, #2c3e50, #34495e);
+}
+
+body.dark-mode .sidebar {
+    background: linear-gradient(180deg, #2c3e50, #23313f);
+    box-shadow: 4px 0 15px rgba(0,0,0,0.25);
+}
+
+body.dark-mode h1.dash-title, 
+body.dark-mode h2 {
+    color: var(--dark-text);
+    border-bottom-color: var(--primary);
+}
+
+body.dark-mode .dash-card,
+body.dark-mode .form-container,
+body.dark-mode .archived-card,
+body.dark-mode .auth-box,
+body.dark-mode table,
+body.dark-mode .modal-content,
+body.dark-mode .record-detail-card {
+    background: var(--dark-surface);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+body.dark-mode .dash-card { border-left-color: var(--primary); }
+body.dark-mode .dash-card h3 { color: var(--dark-text); }
+body.dark-mode .dash-card p { color: var(--dark-text-muted); }
+body.dark-mode .dash-card .icon-circle { background: #2c3e50; color: var(--primary); }
+
+body.dark-mode th, 
+body.dark-mode td,
+body.dark-mode fieldset {
+    border-color: var(--dark-border);
+}
+
+body.dark-mode tbody tr:hover { background-color: #4a627a; }
+
+body.dark-mode input, 
+body.dark-mode select, 
+body.dark-mode textarea {
+    background: #2c3e50;
+    border-color: var(--dark-border);
+    color: var(--dark-text);
+}
+
+body.dark-mode input:focus, 
+body.dark-mode select:focus, 
+body.dark-mode textarea:focus {
+    background: var(--dark-surface);
+    border-color: var(--primary);
+    box-shadow: 0 0 0 4px rgba(26, 188, 156, 0.2);
+}
+
+
+.restore-btn:hover{
+  background:#16a085;
+}
+
+/* ================== DARK MODE TOGGLE ================== */
+.dark-mode-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 25px;
+    padding: 10px;
+    background: rgba(0,0,0,0.2);
+    border-radius: 50px;
+}
+
+.dark-mode-toggle i.fa-moon {
+    color: #f1c40f; /* Yellow moon */
+}
+
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 50px;
+    height: 24px;
+}
+
+.switch input { 
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #7f8c8d;
+    transition: .4s;
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 18px;
+    width: 18px;
+    left: 3px;
+    bottom: 3px;
+    background-color: white;
+    transition: .4s;
+}
+
+input:checked + .slider {
+    background-color: var(--primary);
+}
+
+input:checked + .slider:before {
+    transform: translateX(26px);
+}
+
+.slider.round {
+    border-radius: 34px;
+}
+
+.slider.round:before {
+    border-radius: 50%;
+}
+
+/* ================== DARK MODE STYLES ================== */
+body.dark-mode {
+    background: var(--dark-bg);
+    color: var(--dark-text);
+    background: linear-gradient(to top, #2c3e50, #34495e);
+}
+
+body.dark-mode .sidebar {
+    background: linear-gradient(180deg, #2c3e50, #23313f);
+    box-shadow: 4px 0 15px rgba(0,0,0,0.25);
+}
+
+body.dark-mode h1.dash-title, 
+body.dark-mode h2 {
+    color: var(--dark-text);
+    border-bottom-color: var(--primary);
+}
+
+body.dark-mode .dash-card,
+body.dark-mode .form-container,
+body.dark-mode .archived-card,
+body.dark-mode .auth-box,
+body.dark-mode table,
+body.dark-mode .modal-content,
+body.dark-mode .record-detail-card {
+    background: var(--dark-surface);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+body.dark-mode .dash-card { border-left-color: var(--primary); }
+body.dark-mode .dash-card h3 { color: var(--dark-text); }
+body.dark-mode .dash-card p { color: var(--dark-text-muted); }
+body.dark-mode .dash-card .icon-circle { background: #2c3e50; color: var(--primary); }
+
+body.dark-mode th, 
+body.dark-mode td,
+body.dark-mode fieldset {
+    border-color: var(--dark-border);
+}
+
+body.dark-mode tbody tr:hover { background-color: #4a627a; }
+
+body.dark-mode input, 
+body.dark-mode select, 
+body.dark-mode textarea {
+    background: #2c3e50;
+    border-color: var(--dark-border);
+    color: var(--dark-text);
+}
+
+body.dark-mode input:focus, 
+body.dark-mode select:focus, 
+body.dark-mode textarea:focus {
+    background: var(--dark-surface);
+    border-color: var(--primary);
+    box-shadow: 0 0 0 4px rgba(26, 188, 156, 0.2);
+}
+
+
+.restore-btn:hover{
+  background:#16a085;
+}
+
+/* ================== DARK MODE TOGGLE ================== */
+.dark-mode-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 25px;
+    padding: 10px;
+    background: rgba(0,0,0,0.2);
+    border-radius: 50px;
+}
+
+.dark-mode-toggle i.fa-moon {
+    color: #f1c40f; /* Yellow moon */
+}
+
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 50px;
+    height: 24px;
+}
+
+.switch input { 
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #7f8c8d;
+    transition: .4s;
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 18px;
+    width: 18px;
+    left: 3px;
+    bottom: 3px;
+    background-color: white;
+    transition: .4s;
+}
+
+input:checked + .slider {
+    background-color: var(--primary);
+}
+
+input:checked + .slider:before {
+    transform: translateX(26px);
+}
+
+.slider.round {
+    border-radius: 34px;
+}
+
+.slider.round:before {
+    border-radius: 50%;
+}
+
+/* ================== DARK MODE STYLES ================== */
+body.dark-mode {
+    background: var(--dark-bg);
+    color: var(--dark-text);
+    background: linear-gradient(to top, #2c3e50, #34495e);
+}
+
+body.dark-mode .sidebar {
+    background: linear-gradient(180deg, #2c3e50, #23313f);
+    box-shadow: 4px 0 15px rgba(0,0,0,0.25);
+}
+
+body.dark-mode h1.dash-title, 
+body.dark-mode h2 {
+    color: var(--dark-text);
+    border-bottom-color: var(--primary);
+}
+
+body.dark-mode .dash-card,
+body.dark-mode .form-container,
+body.dark-mode .archived-card,
+body.dark-mode .auth-box,
+body.dark-mode table,
+body.dark-mode .modal-content,
+body.dark-mode .record-detail-card {
+    background: var(--dark-surface);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+body.dark-mode .dash-card { border-left-color: var(--primary); }
+body.dark-mode .dash-card h3 { color: var(--dark-text); }
+body.dark-mode .dash-card p { color: var(--dark-text-muted); }
+body.dark-mode .dash-card .icon-circle { background: #2c3e50; color: var(--primary); }
+
+body.dark-mode th, 
+body.dark-mode td,
+body.dark-mode fieldset {
+    border-color: var(--dark-border);
+}
+
+body.dark-mode tbody tr:hover { background-color: #4a627a; }
+
+body.dark-mode input, 
+body.dark-mode select, 
+body.dark-mode textarea {
+    background: #2c3e50;
+    border-color: var(--dark-border);
+    color: var(--dark-text);
+}
+
+body.dark-mode input:focus, 
+body.dark-mode select:focus, 
+body.dark-mode textarea:focus {
+    background: var(--dark-surface);
+    border-color: var(--primary);
+    box-shadow: 0 0 0 4px rgba(26, 188, 156, 0.2);
+}
+
+
+.restore-btn:hover{
+  background:#16a085;
+}
+
+/* ================== DARK MODE TOGGLE ================== */
+.dark-mode-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 25px;
+    padding: 10px;
+    background: rgba(0,0,0,0.2);
+    border-radius: 50px;
+}
+
+.dark-mode-toggle i.fa-moon {
+    color: #f1c40f; /* Yellow moon */
+}
+
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 50px;
+    height: 24px;
+}
+
+.switch input { 
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #7f8c8d;
+    transition: .4s;
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 18px;
+    width: 18px;
+    left: 3px;
+    bottom: 3px;
+    background-color: white;
+    transition: .4s;
+}
+
+input:checked + .slider {
+    background-color: var(--primary);
+}
+
+input:checked + .slider:before {
+    transform: translateX(26px);
+}
+
+.slider.round {
+    border-radius: 34px;
+}
+
+.slider.round:before {
+    border-radius: 50%;
+}
+
+/* ================== DARK MODE STYLES ================== */
+body.dark-mode {
+    background: var(--dark-bg);
+    color: var(--dark-text);
+    background: linear-gradient(to top, #2c3e50, #34495e);
+}
+
+body.dark-mode .sidebar {
+    background: linear-gradient(180deg, #2c3e50, #23313f);
+    box-shadow: 4px 0 15px rgba(0,0,0,0.25);
+}
+
+body.dark-mode h1.dash-title, 
+body.dark-mode h2 {
+    color: var(--dark-text);
+    border-bottom-color: var(--primary);
+}
+
+body.dark-mode .dash-card,
+body.dark-mode .form-container,
+body.dark-mode .archived-card,
+body.dark-mode .auth-box,
+body.dark-mode table,
+body.dark-mode .modal-content,
+body.dark-mode .record-detail-card {
+    background: var(--dark-surface);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+body.dark-mode .dash-card { border-left-color: var(--primary); }
+body.dark-mode .dash-card h3 { color: var(--dark-text); }
+body.dark-mode .dash-card p { color: var(--dark-text-muted); }
+body.dark-mode .dash-card .icon-circle { background: #2c3e50; color: var(--primary); }
+
+body.dark-mode th, 
+body.dark-mode td,
+body.dark-mode fieldset {
+    border-color: var(--dark-border);
+}
+
+body.dark-mode tbody tr:hover { background-color: #4a627a; }
+
+body.dark-mode input, 
+body.dark-mode select, 
+body.dark-mode textarea {
+    background: #2c3e50;
+    border-color: var(--dark-border);
+    color: var(--dark-text);
+}
+
+body.dark-mode input:focus, 
+body.dark-mode select:focus, 
+body.dark-mode textarea:focus {
+    background: var(--dark-surface);
+    border-color: var(--primary);
+    box-shadow: 0 0 0 4px rgba(26, 188, 156, 0.2);
+}
+
+
+.restore-btn:hover{
+  background:#16a085;
+}
+
+/* ================== DARK MODE TOGGLE ================== */
+.dark-mode-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 25px;
+    padding: 10px;
+    background: rgba(0,0,0,0.2);
+    border-radius: 50px;
+}
+
+.dark-mode-toggle i.fa-moon {
+    color: #f1c40f; /* Yellow moon */
+}
+
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 50px;
+    height: 24px;
+}
+
+.switch input { 
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #7f8c8d;
+    transition: .4s;
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 18px;
+    width: 18px;
+    left: 3px;
+    bottom: 3px;
+    background-color: white;
+    transition: .4s;
+}
+
+input:checked + .slider {
+    background-color: var(--primary);
+}
+
+input:checked + .slider:before {
+    transform: translateX(26px);
+}
+
+.slider.round {
+    border-radius: 34px;
+}
+
+.slider.round:before {
+    border-radius: 50%;
+}
+
+/* ================== DARK MODE STYLES ================== */
+body.dark-mode {
+    background: var(--dark-bg);
+    color: var(--dark-text);
+    background: linear-gradient(to top, #2c3e50, #34495e);
+}
+
+body.dark-mode .sidebar {
+    background: linear-gradient(180deg, #2c3e50, #23313f);
+    box-shadow: 4px 0 15px rgba(0,0,0,0.25);
+}
+
+body.dark-mode h1.dash-title, 
+body.dark-mode h2 {
+    color: var(--dark-text);
+    border-bottom-color: var(--primary);
+}
+
+body.dark-mode .dash-card,
+body.dark-mode .form-container,
+body.dark-mode .archived-card,
+body.dark-mode .auth-box,
+body.dark-mode table,
+body.dark-mode .modal-content,
+body.dark-mode .record-detail-card {
+    background: var(--dark-surface);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+body.dark-mode .dash-card { border-left-color: var(--primary); }
+body.dark-mode .dash-card h3 { color: var(--dark-text); }
+body.dark-mode .dash-card p { color: var(--dark-text-muted); }
+body.dark-mode .dash-card .icon-circle { background: #2c3e50; color: var(--primary); }
+
+body.dark-mode th, 
+body.dark-mode td,
+body.dark-mode fieldset {
+    border-color: var(--dark-border);
+}
+
+body.dark-mode tbody tr:hover { background-color: #4a627a; }
+
+body.dark-mode input, 
+body.dark-mode select, 
+body.dark-mode textarea {
+    background: #2c3e50;
+    border-color: var(--dark-border);
+    color: var(--dark-text);
+}
+
+body.dark-mode input:focus, 
+body.dark-mode select:focus, 
+body.dark-mode textarea:focus {
+    background: var(--dark-surface);
+    border-color: var(--primary);
+    box-shadow: 0 0 0 4px rgba(26, 188, 156, 0.2);
+}
+
+
+.restore-btn:hover{
+  background:#16a085;
+}
+
+/* ================== DARK MODE TOGGLE ================== */
+.dark-mode-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 25px;
+    padding: 10px;
+    background: rgba(0,0,0,0.2);
+    border-radius: 50px;
+}
+
+.dark-mode-toggle i.fa-moon {
+    color: #f1c40f; /* Yellow moon */
+}
+
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 50px;
+    height: 24px;
+}
+
+.switch input { 
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #7f8c8d;
+    transition: .4s;
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 18px;
+    width: 18px;
+    left: 3px;
+    bottom: 3px;
+    background-color: white;
+    transition: .4s;
+}
+
+input:checked + .slider {
+    background-color: var(--primary);
+}
+
+input:checked + .slider:before {
+    transform: translateX(26px);
+}
+
+.slider.round {
+    border-radius: 34px;
+}
+
+.slider.round:before {
+    border-radius: 50%;
+}
+
+/* ================== DARK MODE STYLES ================== */
+body.dark-mode {
+    background: var(--dark-bg);
+    color: var(--dark-text);
+    background: linear-gradient(to top, #2c3e50, #34495e);
+}
+
+body.dark-mode .sidebar {
+    background: linear-gradient(180deg, #2c3e50, #23313f);
+    box-shadow: 4px 0 15px rgba(0,0,0,0.25);
+}
+
+body.dark-mode h1.dash-title, 
+body.dark-mode h2 {
+    color: var(--dark-text);
+    border-bottom-color: var(--primary);
+}
+
+body.dark-mode .dash-card,
+body.dark-mode .form-container,
+body.dark-mode .archived-card,
+body.dark-mode .auth-box,
+body.dark-mode table,
+body.dark-mode .modal-content,
+body.dark-mode .record-detail-card {
+    background: var(--dark-surface);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+body.dark-mode .dash-card { border-left-color: var(--primary); }
+body.dark-mode .dash-card h3 { color: var(--dark-text); }
+body.dark-mode .dash-card p { color: var(--dark-text-muted); }
+body.dark-mode .dash-card .icon-circle { background: #2c3e50; color: var(--primary); }
+
+body.dark-mode th, 
+body.dark-mode td,
+body.dark-mode fieldset {
+    border-color: var(--dark-border);
+}
+
+body.dark-mode tbody tr:hover { background-color: #4a627a; }
+
+body.dark-mode input, 
+body.dark-mode select, 
+body.dark-mode textarea {
+    background: #2c3e50;
+    border-color: var(--dark-border);
+    color: var(--dark-text);
+}
+
+body.dark-mode input:focus, 
+body.dark-mode select:focus, 
+body.dark-mode textarea:focus {
+    background: var(--dark-surface);
+    border-color: var(--primary);
+    box-shadow: 0 0 0 4px rgba(26, 188, 156, 0.2);
+}
+
+
+.restore-btn:hover{
+  background:#16a085;
+}
+
+/* ================== DARK MODE TOGGLE ================== */
+.dark-mode-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 25px;
+    padding: 10px;
+    background: rgba(0,0,0,0.2);
+    border-radius: 50px;
+}
+
+.dark-mode-toggle i.fa-moon {
+    color: #f1c40f; /* Yellow moon */
+}
+
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 50px;
+    height: 24px;
+}
+
+.switch input { 
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #7f8c8d;
+    transition: .4s;
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 18px;
+    width: 18px;
+    left: 3px;
+    bottom: 3px;
+    background-color: white;
+    transition: .4s;
+}
+
+input:checked + .slider {
+    background-color: var(--primary);
+}
+
+input:checked + .slider:before {
+    transform: translateX(26px);
+}
+
+.slider.round {
+    border-radius: 34px;
+}
+
+.slider.round:before {
+    border-radius: 50%;
+}
+
+/* ================== DARK MODE STYLES ================== */
+body.dark-mode {
+    background: var(--dark-bg);
+    color: var(--dark-text);
+    background: linear-gradient(to top, #2c3e50, #34495e);
+}
+
+body.dark-mode .sidebar {
+    background: linear-gradient(180deg, #2c3e50, #23313f);
+    box-shadow: 4px 0 15px rgba(0,0,0,0.25);
+}
+
+body.dark-mode h1.dash-title, 
+body.dark-mode h2 {
+    color: var(--dark-text);
+    border-bottom-color: var(--primary);
+}
+
+body.dark-mode .dash-card,
+body.dark-mode .form-container,
+body.dark-mode .archived-card,
+body.dark-mode .auth-box,
+body.dark-mode table,
+body.dark-mode .modal-content,
+body.dark-mode .record-detail-card {
+    background: var(--dark-surface);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+body.dark-mode .dash-card { border-left-color: var(--primary); }
+body.dark-mode .dash-card h3 { color: var(--dark-text); }
+body.dark-mode .dash-card p { color: var(--dark-text-muted); }
+body.dark-mode .dash-card .icon-circle { background: #2c3e50; color: var(--primary); }
+
+body.dark-mode th, 
+body.dark-mode td,
+body.dark-mode fieldset {
+    border-color: var(--dark-border);
+}
+
+body.dark-mode tbody tr:hover { background-color: #4a627a; }
+
+body.dark-mode input, 
+body.dark-mode select, 
+body.dark-mode textarea {
+    background: #2c3e50;
+    border-color: var(--dark-border);
+    color: var(--dark-text);
+}
+
+body.dark-mode input:focus, 
+body.dark-mode select:focus, 
+body.dark-mode textarea:focus {
+    background: var(--dark-surface);
+    border-color: var(--primary);
+    box-shadow: 0 0 0 4px rgba(26, 188, 156, 0.2);
+}
+
+.restore-btn:hover{
+  background:#16a085;
+}
+
+/* ================== DARK MODE TOGGLE ================== */
+.dark-mode-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 25px;
+    padding: 10px;
+    background: rgba(0,0,0,0.2);
+    border-radius: 50px;
+}
+
+.dark-mode-toggle i.fa-moon {
+    color: #f1c40f; /* Yellow moon */
+}
+
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 50px;
+    height: 24px;
+}
+
+.switch input { 
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #7f8c8d;
+    transition: .4s;
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 18px;
+    width: 18px;
+    left: 3px;
+    bottom: 3px;
+    background-color: white;
+    transition: .4s;
+}
+
+input:checked + .slider {
+    background-color: var(--primary);
+}
+
+input:checked + .slider:before {
+    transform: translateX(26px);
+}
+
+.slider.round {
+    border-radius: 34px;
+}
+
+.slider.round:before {
+    border-radius: 50%;
+}
+
+/* ================== DARK MODE STYLES ================== */
+body.dark-mode {
+    background: var(--dark-bg);
+    color: var(--dark-text);
+    background: linear-gradient(to top, #2c3e50, #34495e);
+}
+
+body.dark-mode .sidebar {
+    background: linear-gradient(180deg, #2c3e50, #23313f);
+    box-shadow: 4px 0 15px rgba(0,0,0,0.25);
+}
+
+body.dark-mode h1.dash-title, 
+body.dark-mode h2 {
+    color: var(--dark-text);
+    border-bottom-color: var(--primary);
+}
+
+body.dark-mode .dash-card,
+body.dark-mode .form-container,
+body.dark-mode .archived-card,
+body.dark-mode .auth-box,
+body.dark-mode table,
+body.dark-mode .modal-content,
+body.dark-mode .record-detail-card {
+    background: var(--dark-surface);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+body.dark-mode .dash-card { border-left-color: var(--primary); }
+body.dark-mode .dash-card h3 { color: var(--dark-text); }
+body.dark-mode .dash-card p { color: var(--dark-text-muted); }
+body.dark-mode .dash-card .icon-circle { background: #2c3e50; color: var(--primary); }
+
+body.dark-mode th, 
+body.dark-mode td,
+body.dark-mode fieldset {
+    border-color: var(--dark-border);
+}
+
+body.dark-mode tbody tr:hover { background-color: #4a627a; }
+
+body.dark-mode input, 
+body.dark-mode select, 
+body.dark-mode textarea {
+    background: #2c3e50;
+    border-color: var(--dark-border);
+    color: var(--dark-text);
+}
+
+body.dark-mode input:focus, 
+body.dark-mode select:focus, 
+body.dark-mode textarea:focus {
+    background: var(--dark-surface);
+    border-color: var(--primary);
+    box-shadow: 0 0 0 4px rgba(26, 188, 156, 0.2);
+}
+
+.restore-btn:hover{
+  background:#16a085;
+}
+
+/* ================== DARK MODE TOGGLE ================== */
+.dark-mode-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 25px;
+    padding: 10px;
+    background: rgba(0,0,0,0.2);
+    border-radius: 50px;
+}
+
+.dark-mode-toggle i.fa-moon {
+    color: #f1c40f; /* Yellow moon */
+}
+
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 50px;
+    height: 24px;
+}
+
+.switch input { 
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #7f8c8d;
+    transition: .4s;
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 18px;
+    width: 18px;
+    left: 3px;
+    bottom: 3px;
+    background-color: white;
+    transition: .4s;
+}
+
+input:checked + .slider {
+    background-color: var(--primary);
+}
+
+input:checked + .slider:before {
+    transform: translateX(26px);
+}
+
+.slider.round {
+    border-radius: 34px;
+}
+
+.slider.round:before {
+    border-radius: 50%;
+}
+
+/* ================== DARK MODE STYLES ================== */
+body.dark-mode {
+    background: var(--dark-bg);
+    color: var(--dark-text);
+    background: linear-gradient(to top, #2c3e50, #34495e);
+}
+
+body.dark-mode .sidebar {
+    background: linear-gradient(180deg, #2c3e50, #23313f);
+    box-shadow: 4px 0 15px rgba(0,0,0,0.25);
+}
+
+body.dark-mode h1.dash-title, 
+body.dark-mode h2 {
+    color: var(--dark-text);
+    border-bottom-color: var(--primary);
+}
+
+body.dark-mode .dash-card,
+body.dark-mode .form-container,
+body.dark-mode .archived-card,
+body.dark-mode .auth-box,
+body.dark-mode table,
+body.dark-mode .modal-content,
+body.dark-mode .record-detail-card {
+    background: var(--dark-surface);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+body.dark-mode .dash-card { border-left-color: var(--primary); }
+body.dark-mode .dash-card h3 { color: var(--dark-text); }
+body.dark-mode .dash-card p { color: var(--dark-text-muted); }
+body.dark-mode .dash-card .icon-circle { background: #2c3e50; color: var(--primary); }
+
+body.dark-mode th, 
+body.dark-mode td,
+body.dark-mode fieldset {
+    border-color: var(--dark-border);
+}
+
+body.dark-mode tbody tr:hover { background-color: #4a627a; }
+
+body.dark-mode input, 
+body.dark-mode select, 
+body.dark-mode textarea {
+    background: #2c3e50;
+    border-color: var(--dark-border);
+    color: var(--dark-text);
+}
+
+body.dark-mode input:focus, 
+body.dark-mode select:focus, 
+body.dark-mode textarea:focus {
+    background: var(--dark-surface);
+    border-color: var(--primary);
+    box-shadow: 0 0 0 4px rgba(26, 188, 156, 0.2);
+}
+
+body.dark-mode .form-question { background: var(--dark-bg); }

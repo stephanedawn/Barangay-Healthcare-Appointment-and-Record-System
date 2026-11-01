@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="/cssdesign/styles.css">
+</head>
+<body>
+    <div id="patientDashboard">
+        <div class="sidebar">
+            <h3><img src="images/logoo.jpg" class="logo-circle"><br>MENU</h3>
+            <a onclick="showPatient('patientHome', this)" class="active-link"> <i class="fa-solid fa-chart-line"></i> <span>Dashboard</span></a>
+            <a onclick="showPatient('patientAppointments', this)"><i class="fa-solid fa-calendar-check"></i> <span>Appointments</span></a>
+            <a onclick="showPatient('patientRecords', this)"><i class="fa-solid fa-folder-open"></i> <span>My Records</span></a>
+            <a onclick="logout()"><i class="fa-solid fa-right-from-bracket"></i> <span>Logout</span></a>
+        </div>
+        <div class="main">
+            <div id="patientHome" class="section active">
+                <h1 class="dash-title">My Dashboard</h1>
+                <div class="dashboard-cards">
+                    <div class="dash-card" onclick="openModal('appointments')">
+                        <div class="icon-circle"><i class="fa-solid fa-calendar-check"></i></div>
+                        <div>
+                            <h3 id="patientTotalAppointments">0</h3><p>Appointments</p></div>
+                    </div>
+                
+                    <div class="dash-card" onclick="openModal('records')">
+                        <div class="icon-circle"><i class="fa-solid fa-folder-open"></i></div>
+                        <div><h3 id="patientTotalRecords">0</h3><p>Records</p></div>
+                    </div>
+                </div>
+            </div>
+            <div id="detailsModal" class="modal">
+                <div class="modal-content">
+                    <span class="closeModal" onclick="closeModal()">&times;</span>
+                    <h2 id="modalTitle">Details</h2>
+                    <table id="modalTable">
+                    <thead>
+                        <tr>
+                        <th>#</th>
+                        <th>Date</th>
+                        <th>Details</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- JS will populate rows -->
+                    </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- ================= APPOINTMENTS ================= -->
+            <div id="patientAppointments" class="section">
+
+                <div class="appointment-wrapper">
+
+                    <div class="appointment-form-card">
+                    <h2>Appointment Form</h2>
+
+                    <input type="text" id="apptName" placeholder="Full Name" required>
+                    <input type="number" id="apptAge" placeholder="Age" required>
+                    <input type="text" id="apptContact" placeholder="Contact Number" required>
+
+                    <select id="apptLocation" required>
+                        <option disabled selected>Select Location / Purok</option>
+                        <option>Purok 1</option>
+                        <option>Purok 2</option>
+                        <option>Purok 3</option>
+                        <option>Purok 4</option>
+                        <option>Purok 5</option>
+                        <option>Purok 6</option>
+                        <option>Purok 7</option>
+                        <option>Purok 8</option>
+                    </select>
+
+                    <select id="apptGender" required>
+                        <option disabled selected>Select Gender</option>
+                        <option>Male</option>
+                        <option>Female</option>
+                    </select>
+
+                    <select id="apptType" required>
+                        <option disabled selected>Purpose of Visit</option>
+                        <option>Prenatal</option>
+                        <option>Immunization</option>
+                        <option>Family Planning</option>
+                        <option>Others</option>
+                    </select>
+
+                    <input type="date" id="apptDate" required>
+                    <input type="time" id="apptTime" required>
+
+                    <textarea id="apptDetails" rows="3" placeholder="Additional Details (optional)"></textarea>
+
+                    <button class="submit-btn" onclick="submitAppointment(this)">
+                        Submit Appointment
+                    </button>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <!-- ================= RECORDS ================= -->
+            <div id="patientRecords" class="section">
+
+                <div class="client-container">
+                    <h2>Appointment Records</h2>
+                    <div class="records-header">
+                        <input type="text" id="patientRecordSearch" placeholder="Search by purpose, date, status..." onkeyup="searchPatientRecords()">
+                    </div>
+                    <div class="table-wrapper">
+                        <div style="overflow-x:auto;">
+                            <table>
+                            <thead>
+                                <tr>
+                                <th>#</th>
+                                <th>Name</th> 
+                                <th>Age</th>
+                                <th>Gender</th>
+                                <th>Purpose</th>
+                                <th>Date</th>
+                                <th>Time</th>
+                                <th>Location</th>
+                                <th>Contact</th>
+                                <th>Details</th>
+                                <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody id="appointmentTableBody">
+                            </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+        </div> <!-- END MAIN -->
+    </div> <!-- END DASHBOARD -->
+    <script src="jsscript/script.js"></script>
+</body>
+</html>
